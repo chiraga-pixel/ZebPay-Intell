@@ -3,480 +3,1032 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZebPay Intelligence — June 4, 2026</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>ZebPay Market Intelligence Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0c10;--bg2:#111318;--bg3:#181c24;--bg4:#1e2330;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);--text:#f0f2f8;--text2:#8892a4;--text3:#556070;--accent:#f5a623;--blue:#4a9eff;--green:#36d67c;--red:#ff4d6d;--purple:#9b6dff;--teal:#26d9b8;--amber:#f5a623;--r:12px;--rs:8px}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.page{max-width:1400px;margin:0 auto;padding:1.25rem}
+:root {
+  --bg: #0a0c10;
+  --bg2: #111318;
+  --bg3: #181c24;
+  --bg4: #1e2330;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0f2f8;
+  --text2: #8892a4;
+  --text3: #556070;
+  --accent: #f5a623;
+  --accent2: #ff6b35;
+  --blue: #4a9eff;
+  --blue2: #1a5fa0;
+  --green: #36d67c;
+  --green2: #1a5c38;
+  --red: #ff4d6d;
+  --red2: #7a1a2e;
+  --purple: #9b6dff;
+  --teal: #26d9b8;
+  --teal2: #0d5c4e;
+  --amber: #f5a623;
+  --amber2: #6b4010;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
 
-/* HEADER */
-.hdr{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1.1rem 1.4rem;margin-bottom:1.1rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem}
-.hdr-l h1{font-size:16px;font-weight:500;color:var(--text)}
-.hdr-l .sub{font-size:11px;color:var(--text2);margin-top:3px}
-.hdr-r{display:flex;gap:.5rem;flex-wrap:wrap}
-.pill{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:500;padding:3px 10px;border-radius:20px;border:1px solid}
-.pill-red{background:rgba(255,77,109,.1);border-color:rgba(255,77,109,.35);color:#ff4d6d}
-.pill-amber{background:rgba(245,166,35,.1);border-color:rgba(245,166,35,.35);color:#f5a623}
-.pill-blue{background:rgba(74,158,255,.1);border-color:rgba(74,158,255,.35);color:#4a9eff}
-.pill-green{background:rgba(54,214,124,.1);border-color:rgba(54,214,124,.35);color:#36d67c}
-.pill-teal{background:rgba(38,217,184,.1);border-color:rgba(38,217,184,.35);color:#26d9b8}
-.pill-purple{background:rgba(155,109,255,.1);border-color:rgba(155,109,255,.35);color:#9b6dff}
+/* ── SIDEBAR ── */
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+}
+.sidebar-logo {
+  padding: 1.5rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.logo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #f5a623, #ff6b35);
+  border-radius: 10px;
+  padding: 6px 12px 6px 8px;
+}
+.logo-badge .dot {
+  width: 20px; height: 20px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 5px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700; color: #ff6b35;
+}
+.logo-badge span { font-size: 14px; font-weight: 600; color: #fff; letter-spacing: .02em; }
+.sidebar-tagline { font-size: 11px; color: var(--text3); margin-top: 6px; }
 
-/* TABS */
-.tab-nav{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1.1rem}
-.tb{font-size:11px;font-weight:500;padding:5px 13px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text2);cursor:pointer;transition:all .15s}
-.tb:hover{border-color:var(--border2);color:var(--text)}
-.tb.active{background:var(--accent);color:#0a0c10;border-color:transparent}
-.panel{display:none}.panel.active{display:block}
+/* ── CALENDAR ── */
+.cal-section { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); }
+.cal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: .75rem;
+}
+.cal-header h3 { font-size: 12px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: .06em; }
+.cal-nav { display: flex; gap: 4px; }
+.cal-nav button {
+  width: 24px; height: 24px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 6px; color: var(--text2);
+  cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center;
+  transition: all .15s;
+}
+.cal-nav button:hover { background: var(--bg4); color: var(--text); }
+.cal-month-year { font-size: 13px; font-weight: 500; color: var(--text); text-align: center; margin-bottom: .5rem; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.cal-day-name { font-size: 9px; color: var(--text3); text-align: center; padding: 3px 0; font-weight: 500; text-transform: uppercase; }
+.cal-day {
+  aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--text2);
+  border-radius: 6px; cursor: pointer;
+  transition: all .15s; position: relative;
+}
+.cal-day:hover { background: var(--bg3); color: var(--text); }
+.cal-day.has-data { color: var(--text); }
+.cal-day.has-data::after {
+  content: '';
+  position: absolute; bottom: 2px;
+  width: 4px; height: 4px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+.cal-day.selected {
+  background: var(--accent);
+  color: #0a0c10;
+  font-weight: 600;
+}
+.cal-day.selected::after { display: none; }
+.cal-day.today { border: 1px solid var(--accent); color: var(--accent); }
+.cal-day.today.selected { border-color: transparent; color: #0a0c10; }
+.cal-day.other-month { opacity: 0.3; }
+.cal-day.empty { cursor: default; }
 
-/* TWO COLUMN LAYOUT */
-.two-col{display:grid;grid-template-columns:1fr 290px;gap:1rem;align-items:start}
+/* ── SIDEBAR NAV ── */
+.sidebar-nav { padding: .75rem 1rem; flex: 1; }
+.nav-label { font-size: 10px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: .07em; padding: 0 .25rem .4rem; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: .5rem .75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all .15s;
+  margin-bottom: 2px;
+  font-size: 13px; color: var(--text2);
+}
+.nav-item:hover { background: var(--bg3); color: var(--text); }
+.nav-item.active { background: rgba(245,166,35,0.12); color: var(--accent); }
+.nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+.nav-item .nav-badge {
+  margin-left: auto; font-size: 10px; padding: 1px 6px;
+  background: var(--red2); color: var(--red);
+  border-radius: 10px; font-weight: 500;
+}
+.nav-item .nav-badge.green { background: var(--green2); color: var(--green); }
 
-/* SOURCE COLUMN */
-.src-col{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:1rem;position:sticky;top:1rem}
-.src-col-title{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
-.src-item{padding:.5rem 0;border-bottom:1px solid var(--border)}
-.src-item:last-child{border-bottom:none}
-.src-domain{font-size:11px;font-weight:500;color:var(--text);margin-bottom:2px}
-.src-desc{font-size:10px;color:var(--text2);line-height:1.5;margin-bottom:3px}
+/* ── MAIN CONTENT ── */
+.main {
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+.topbar {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(10,12,16,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: .875rem 1.5rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.topbar-left h2 { font-size: 16px; font-weight: 500; color: var(--text); }
+.topbar-left .date-display { font-size: 12px; color: var(--text2); margin-top: 2px; }
+.topbar-right { display: flex; align-items: center; gap: .75rem; }
+.market-pill {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 20px; padding: 4px 10px;
+  font-size: 12px; color: var(--text2);
+}
+.market-pill .dot-live { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.status-pill {
+  font-size: 11px; font-weight: 500; padding: 4px 10px;
+  border-radius: 20px; border: 1px solid;
+}
+.status-pill.fear { background: rgba(255,77,109,0.1); border-color: var(--red); color: var(--red); }
+.status-pill.greed { background: rgba(54,214,124,0.1); border-color: var(--green); color: var(--green); }
+.status-pill.neutral { background: rgba(245,166,35,0.1); border-color: var(--amber); color: var(--amber); }
 
-/* SHARED */
-.sh{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);padding-bottom:.4rem;margin-bottom:.8rem;border-bottom:1px solid var(--border)}
-.g4{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:.6rem;margin-bottom:1rem}
-.mcard{background:var(--bg3);border-radius:var(--rs);padding:.7rem .85rem}
-.mcard .ml{font-size:10px;color:var(--text2);margin-bottom:3px}
-.mcard .mv{font-size:20px;font-weight:500;color:var(--text)}
-.mcard .ms{font-size:10px;color:var(--text2);margin-top:2px}
-.mcard .ms.dn{color:var(--red)}.mcard .ms.up{color:var(--green)}
-.alert{background:rgba(245,166,35,.07);border:1px solid rgba(245,166,35,.2);border-radius:var(--rs);padding:.65rem .9rem;margin-bottom:.9rem}
-.alert p{font-size:12px;color:#c88a1a;line-height:1.5}
-.ai{display:flex;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:.75rem .9rem;margin-bottom:.45rem}
-.an{font-size:11px;font-weight:600;min-width:24px;font-family:'DM Mono',monospace;padding-top:1px}
-.ab .at{font-size:12px;font-weight:500;color:var(--text);margin-bottom:2px}
-.ab .ad{font-size:11px;color:var(--text2);line-height:1.5}
-.mc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:.85rem 1rem;margin-bottom:.65rem}
-.mc h4{font-size:12px;font-weight:500;color:var(--text);margin-bottom:.3rem;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.mc p{font-size:12px;color:var(--text2);line-height:1.6}
-.sr{display:flex;align-items:center;gap:7px;margin:3px 0}
-.sl{font-size:10px;color:var(--text2);width:95px;flex-shrink:0}
-.sbg{flex:1;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
-.sf{height:100%;border-radius:2px}
-.fg{background:var(--green)}.fa{background:var(--amber)}.fr{background:var(--red)}.fb{background:var(--blue)}.ft{background:var(--teal)}.fp{background:var(--purple)}
-.sn{font-size:10px;color:var(--text2);width:26px;text-align:right;flex-shrink:0}
-.ang{background:rgba(245,166,35,.06);border:1px solid rgba(245,166,35,.15);border-radius:var(--rs);padding:.42rem .65rem;margin-top:.4rem}
-.ang .al{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--amber);margin-bottom:1px}
-.ang p{font-size:11px;color:#c88a1a}
-.tbl-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:.8rem}
-.tbl{width:100%;border-collapse:collapse;font-size:11px}
-.tbl th{text-align:left;font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--text2);padding:7px 9px;border-bottom:1px solid var(--border)}
-.tbl td{padding:7px 9px;border-bottom:1px solid var(--border);color:var(--text2);vertical-align:top;line-height:1.5}
-.tbl td:first-child{color:var(--text);font-weight:500}
-.tbl tr:last-child td{border-bottom:none}
-.tbl tr:hover td{background:rgba(255,255,255,.015)}
-.narr-row{display:flex;align-items:center;gap:10px;padding:.5rem 0;border-bottom:1px solid var(--border)}
-.narr-row:last-child{border-bottom:none}
-.nn{font-size:11px;font-weight:500;color:var(--text);width:160px;flex-shrink:0}
-.nbg{flex:1;display:flex;flex-direction:column;gap:3px}
-.mr{display:flex;align-items:center;gap:6px}
-.ml{font-size:9px;color:var(--text2);width:55px;flex-shrink:0;text-transform:uppercase;letter-spacing:.04em}
-.mb{flex:1;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}
-.mf{height:100%;border-radius:2px}
-.pb{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:.35rem 0}
-.pb-c{background:var(--bg3);border-radius:var(--rs);padding:.4rem .55rem}
-.pb-c .pc{font-size:9px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:1px}
-.pb-c .pr{font-size:11px;font-weight:500;color:var(--text)}
-.pb-c.bull{border-left:2px solid var(--green)}.pb-c.base{border-left:2px solid var(--blue)}.pb-c.bear{border-left:2px solid var(--red)}
-.pb-c.bull .pc{color:var(--green)}.pb-c.base .pc{color:var(--blue)}.pb-c.bear .pc{color:var(--red)}
-.comp-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.7rem;margin-bottom:.75rem}
-.cc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:.85rem 1rem}
-.cc h4{font-size:12px;font-weight:500;color:var(--text);margin-bottom:.3rem;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.cc-d{font-size:11px;color:var(--text2);line-height:1.5;margin:.3rem 0}
-.opp{background:rgba(74,158,255,.06);border:1px solid rgba(74,158,255,.15);border-radius:var(--rs);padding:.4rem .65rem;margin-top:.35rem}
-.opp .ol{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--blue);margin-bottom:1px}
-.opp p{font-size:11px;color:#6ab3ff}
-.ni{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:.7rem .9rem;margin-bottom:.45rem}
-.ni .nh{font-size:12px;font-weight:500;color:var(--text);margin-bottom:3px}
-.ni .nm{font-size:10px;color:var(--text2);display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:4px}
-.ni .nb{font-size:11px;color:var(--text2);line-height:1.5}
-.pr-row{display:flex;align-items:flex-start;gap:10px;padding:.65rem 0;border-bottom:1px solid var(--border)}
-.pr-row:last-child{border-bottom:none}
-.pn{font-size:15px;font-weight:600;min-width:30px;font-family:'DM Mono',monospace}
-.pb2 .pt{font-size:12px;font-weight:500;color:var(--text);margin-bottom:2px}
-.pb2 .pd{font-size:11px;color:var(--text2);line-height:1.5}
-.fc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:.85rem 1rem;margin-bottom:.65rem}
-.fc h4{font-size:12px;font-weight:500;color:var(--text);margin-bottom:.28rem}
-.tag-row{display:flex;gap:5px;flex-wrap:wrap;margin:.3rem 0}
-.cta{background:rgba(54,214,124,.05);border:1px solid rgba(54,214,124,.15);border-radius:var(--rs);padding:.4rem .65rem;margin-top:.35rem}
-.cta .cl{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--green);margin-bottom:1px}
-.cta p{font-size:11px;color:#36d67c}
-.rt{font-size:10px;color:var(--text3);margin-top:3px}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
+.content-area { padding: 1.5rem; }
+
+/* ── SECTION TABS ── */
+.tab-nav {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.tab-btn {
+  font-size: 12px; font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--text2);
+  cursor: pointer; transition: all .15s;
+}
+.tab-btn:hover { border-color: var(--border2); color: var(--text); }
+.tab-btn.active { background: var(--accent); color: #0a0c10; border-color: transparent; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── CARDS ── */
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .75rem; margin-bottom: 1.25rem; }
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+}
+.card-title {
+  font-size: 11px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--text3); margin-bottom: .6rem;
+}
+.card-value { font-size: 26px; font-weight: 600; color: var(--text); line-height: 1.2; }
+.card-sub { font-size: 12px; color: var(--text2); margin-top: 3px; }
+.card-sub.up { color: var(--green); }
+.card-sub.down { color: var(--red); }
+
+/* ── METRIC CARD ── */
+.metric-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1rem 1.1rem;
+}
+.metric-card h4 { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: .35rem; display: flex; align-items: center; gap: 6px; }
+.metric-card p { font-size: 12px; color: var(--text2); line-height: 1.6; }
+.score-row { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+.score-label { font-size: 10px; color: var(--text3); width: 90px; flex-shrink: 0; }
+.score-bg { flex: 1; height: 4px; background: var(--bg4); border-radius: 2px; overflow: hidden; }
+.score-fill { height: 100%; border-radius: 2px; transition: width .6s cubic-bezier(.4,0,.2,1); }
+.fill-green { background: var(--green); }
+.fill-amber { background: var(--amber); }
+.fill-red { background: var(--red); }
+.fill-blue { background: var(--blue); }
+.fill-teal { background: var(--teal); }
+.fill-purple { background: var(--purple); }
+.score-num { font-size: 10px; color: var(--text3); width: 28px; text-align: right; flex-shrink: 0; }
+
+/* ── BADGES ── */
+.badge {
+  display: inline-block; font-size: 10px; font-weight: 500;
+  padding: 2px 8px; border-radius: 20px; border: 1px solid;
+}
+.badge-green { background: rgba(54,214,124,0.1); border-color: rgba(54,214,124,0.3); color: var(--green); }
+.badge-red { background: rgba(255,77,109,0.1); border-color: rgba(255,77,109,0.3); color: var(--red); }
+.badge-amber { background: rgba(245,166,35,0.1); border-color: rgba(245,166,35,0.3); color: var(--amber); }
+.badge-blue { background: rgba(74,158,255,0.1); border-color: rgba(74,158,255,0.3); color: var(--blue); }
+.badge-purple { background: rgba(155,109,255,0.1); border-color: rgba(155,109,255,0.3); color: var(--purple); }
+.badge-teal { background: rgba(38,217,184,0.1); border-color: rgba(38,217,184,0.3); color: var(--teal); }
+
+/* ── TABLE ── */
+.intel-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.intel-table th {
+  text-align: left; font-size: 10px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: .06em; color: var(--text3);
+  padding: 8px 10px; border-bottom: 1px solid var(--border);
+}
+.intel-table td {
+  padding: 9px 10px; border-bottom: 1px solid var(--border);
+  color: var(--text2); vertical-align: top; line-height: 1.5;
+}
+.intel-table td:first-child { color: var(--text); font-weight: 500; }
+.intel-table tr:last-child td { border-bottom: none; }
+.intel-table tr:hover td { background: var(--bg3); }
+
+/* ── PRICE GRID ── */
+.price-scenarios { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin-top: .5rem; }
+.price-box { background: var(--bg3); border-radius: var(--radius-sm); padding: .5rem .65rem; }
+.price-box .case { font-size: 9px; text-transform: uppercase; letter-spacing: .06em; color: var(--text3); margin-bottom: 2px; }
+.price-box .range { font-size: 12px; font-weight: 500; color: var(--text); }
+.price-box.bull { border-left: 2px solid var(--green); }
+.price-box.base { border-left: 2px solid var(--blue); }
+.price-box.bear { border-left: 2px solid var(--red); }
+.price-box .case.bull { color: var(--green); }
+.price-box .case.base { color: var(--blue); }
+.price-box .case.bear { color: var(--red); }
+
+/* ── ACTION ITEMS ── */
+.action-list { display: flex; flex-direction: column; gap: .5rem; }
+.action-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: .85rem 1rem;
+}
+.action-num {
+  font-size: 12px; font-weight: 600; min-width: 28px;
+  font-family: 'DM Mono', monospace;
+}
+.action-body .action-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.action-body .action-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.action-meta { margin-left: auto; flex-shrink: 0; }
+
+/* ── NARRATIVE BARS ── */
+.narr-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: .65rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.narr-row:last-child { border-bottom: none; }
+.narr-name { font-size: 12px; font-weight: 500; color: var(--text); width: 170px; flex-shrink: 0; }
+.narr-bar-group { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.mini-row { display: flex; align-items: center; gap: 8px; }
+.mini-lbl { font-size: 9px; color: var(--text3); width: 65px; flex-shrink: 0; text-transform: uppercase; letter-spacing: .04em; }
+.mini-bg { flex: 1; height: 3px; background: var(--bg4); border-radius: 2px; overflow: hidden; }
+.mini-fill { height: 100%; border-radius: 2px; }
+
+/* ── CONTENT TABLE ── */
+.content-table-wrap { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+
+/* ── COMPETITOR CARD ── */
+.comp-card {
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.1rem;
+}
+.comp-card h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: .35rem; }
+.comp-card .comp-desc { font-size: 12px; color: var(--text2); line-height: 1.6; margin: .5rem 0; }
+.opp-box {
+  background: rgba(74,158,255,0.06); border: 1px solid rgba(74,158,255,0.15);
+  border-radius: var(--radius-sm); padding: .5rem .75rem; margin-top: .5rem;
+}
+.opp-box .opp-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--blue); margin-bottom: 2px; }
+.opp-box p { font-size: 11px; color: var(--text2); }
+.alert-box {
+  background: rgba(245,166,35,0.07); border: 1px solid rgba(245,166,35,0.2);
+  border-radius: var(--radius-sm); padding: .75rem 1rem; margin-top: 1rem;
+}
+.alert-box p { font-size: 12px; color: #c88a1a; line-height: 1.5; }
+
+/* ── SECTION HEADING ── */
+.section-heading {
+  font-size: 11px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: .07em; color: var(--text3);
+  padding-bottom: .6rem; margin-bottom: .85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── PRIORITY ROW ── */
+.priority-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: .75rem 0; border-bottom: 1px solid var(--border);
+}
+.priority-row:last-child { border-bottom: none; }
+.priority-num { font-size: 18px; font-weight: 700; min-width: 36px; font-family: 'DM Mono', monospace; }
+.priority-body .p-title { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.priority-body .p-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+.priority-tag { margin-left: auto; flex-shrink: 0; padding-top: 2px; }
+
+/* ── NO DATA STATE ── */
+.no-data {
+  text-align: center; padding: 4rem 2rem;
+  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+}
+.no-data .icon { font-size: 48px; opacity: .3; }
+.no-data h3 { font-size: 18px; font-weight: 500; color: var(--text2); }
+.no-data p { font-size: 13px; color: var(--text3); max-width: 360px; line-height: 1.6; }
+.add-report-btn {
+  margin-top: .5rem;
+  padding: 8px 20px;
+  background: var(--accent);
+  color: #0a0c10;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.add-report-btn:hover { opacity: .85; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--bg4); border-radius: 3px; }
+
+/* ── FEATURE MAP ── */
+.feature-row {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1rem 1.1rem; margin-bottom: .75rem;
+}
+.feature-row h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: .35rem; }
+.feature-row .tag-row { display: flex; gap: 6px; flex-wrap: wrap; margin: .4rem 0; }
+.cta-strip {
+  background: rgba(245,166,35,0.07); border: 1px solid rgba(245,166,35,0.15);
+  border-radius: var(--radius-sm); padding: .5rem .75rem; margin-top: .5rem;
+}
+.cta-strip .cta-lbl { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; color: var(--amber); margin-bottom: 2px; }
+.cta-strip p { font-size: 11px; color: var(--text2); }
+.reel-tip { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .sidebar { width: 220px; min-width: 220px; }
+}
+@media (max-width: 600px) {
+  body { flex-direction: column; overflow: auto; }
+  .sidebar { width: 100%; height: auto; min-height: unset; }
+  .main { height: auto; overflow: visible; }
+}
 </style>
 </head>
 <body>
-<div class="page">
 
-<div class="hdr">
-  <div class="hdr-l">
-    <h1>ZebPay Intelligence Report &mdash; Thursday, June 4, 2026</h1>
-    <div class="sub">Sourced from 12 live publications &middot; India crypto market focus &middot; AI-synthesized</div>
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-badge">
+      <div class="dot">Z</div>
+      <span>ZebPay Intel</span>
+    </div>
+    <div class="sidebar-tagline">Daily Market Intelligence Platform</div>
   </div>
-  <div class="hdr-r">
-    <span class="pill pill-red">BTC ~$66,650</span>
-    <span class="pill pill-red">Fear &amp; Greed: 11</span>
-    <span class="pill pill-amber">ETF Outflows: $2.97B streak</span>
-    <span class="pill pill-blue">India COINS Act in Parliament</span>
-    <span class="pill pill-teal">XRP CME 24/7 Futures Live</span>
-  </div>
-</div>
 
-<div class="tab-nav">
-  <button class="tb active" onclick="showTab('exec',this)">Executive</button>
-  <button class="tb" onclick="showTab('market',this)">Market Trends</button>
-  <button class="tb" onclick="showTab('competitor',this)">Competitors</button>
-  <button class="tb" onclick="showTab('narratives',this)">Narratives</button>
-  <button class="tb" onclick="showTab('price',this)">Price Intel</button>
-  <button class="tb" onclick="showTab('news',this)">News Feed</button>
-  <button class="tb" onclick="showTab('content',this)">Content Ideas</button>
-  <button class="tb" onclick="showTab('features',this)">ZebPay Features</button>
-  <button class="tb" onclick="showTab('priority',this)">Priority Index</button>
-</div>
+  <!-- CALENDAR -->
+  <div class="cal-section">
+    <div class="cal-header">
+      <h3>Select Date</h3>
+      <div class="cal-nav">
+        <button onclick="changeMonth(-1)">&#8249;</button>
+        <button onclick="changeMonth(1)">&#8250;</button>
+      </div>
+    </div>
+    <div class="cal-month-year" id="calMonthYear"></div>
+    <div class="cal-grid" id="calGrid"></div>
+  </div>
 
-<!-- EXEC -->
-<div id="tab-exec" class="panel active">
-<div class="two-col">
-<div>
-  <div class="alert"><p>&#9889; Fear &amp; Greed hit 11 on June 3 &mdash; the lowest reading of all of 2026. BTC is 47% below its Oct 2025 ATH of $126K. BlackRock IBIT logged $527M single-day outflows. 92% of today's selling is forced liquidations. This is ZebPay's biggest SIP campaign window of the year. Act now.</p></div>
-  <div class="sh">Market snapshot</div>
-  <div class="g4">
-    <div class="mcard"><div class="ml">BTC Price</div><div class="mv">$66,650</div><div class="ms dn">&minus;47% from Oct ATH</div></div>
-    <div class="mcard"><div class="ml">Fear &amp; Greed</div><div class="mv" style="color:var(--red)">11</div><div class="ms dn">Extreme Fear</div></div>
-    <div class="mcard"><div class="ml">ETH Price</div><div class="mv">$2,006</div><div class="ms dn">&minus;3.7% (24h)</div></div>
-    <div class="mcard"><div class="ml">XRP</div><div class="mv">$1.35</div><div class="ms">CME 24/7 live</div></div>
-    <div class="mcard"><div class="ml">ETF Outflow Streak</div><div class="mv">10 days</div><div class="ms dn">$2.97B net out</div></div>
-    <div class="mcard"><div class="ml">Total Market Cap</div><div class="mv">$2.27T</div><div class="ms dn">&minus;2.88% (24h)</div></div>
+  <!-- NAV -->
+  <div class="sidebar-nav">
+    <div class="nav-label" style="margin-top:.5rem">Sections</div>
+    <div class="nav-item active" onclick="switchTab('exec',this)">
+      <span class="nav-icon">⚡</span> Executive Summary
+    </div>
+    <div class="nav-item" onclick="switchTab('market',this)">
+      <span class="nav-icon">📈</span> Market Trends
+    </div>
+    <div class="nav-item" onclick="switchTab('competitor',this)">
+      <span class="nav-icon">🔍</span> Competitors
+      <span class="nav-badge">6</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('narratives',this)">
+      <span class="nav-icon">💡</span> Narratives
+    </div>
+    <div class="nav-item" onclick="switchTab('price',this)">
+      <span class="nav-icon">💰</span> Price Intel
+    </div>
+    <div class="nav-item" onclick="switchTab('content',this)">
+      <span class="nav-icon">🎬</span> Content Ideas
+      <span class="nav-badge green">20</span>
+    </div>
+    <div class="nav-item" onclick="switchTab('features',this)">
+      <span class="nav-icon">🚀</span> ZebPay Features
+    </div>
+    <div class="nav-item" onclick="switchTab('priority',this)">
+      <span class="nav-icon">🎯</span> Priority Index
+    </div>
   </div>
-  <div class="sh">Top 5 opportunities</div>
-  <div class="ai"><div class="an" style="color:var(--accent)">01</div><div class="ab"><div class="at">Fear &amp; Greed = 11 &mdash; Launch SIP campaign immediately</div><div class="ad">Every prior F&amp;G sub-15 reading preceded strong 6-month returns. "Ab India Karega Bitcoin SIP" campaign. CTA: Start SIP at Rs.100/day.</div></div><span class="pill pill-red" style="flex-shrink:0;margin-left:auto;align-self:flex-start">URGENT</span></div>
-  <div class="ai"><div class="an" style="color:var(--accent)">02</div><div class="ab"><div class="at">ZebPay was in Parliament this week &mdash; COINS Act push</div><div class="ad">India's Finance Committee formally studying crypto regulation. ZebPay in the room. Publish authority content: "We were there. Here's India's crypto future."</div></div><span class="pill pill-amber" style="flex-shrink:0;margin-left:auto;align-self:flex-start">HIGH</span></div>
-  <div class="ai"><div class="an" style="color:var(--accent)">03</div><div class="ab"><div class="at">CME launched 24/7 XRP Futures with Ripple Prime</div><div class="ad">Institutional XRP access now round-the-clock. Ripple expanding DC policy office. Create XRP deep-dive reel + promote XRP INR trading pair this week.</div></div><span class="pill pill-amber" style="flex-shrink:0;margin-left:auto;align-self:flex-start">HIGH</span></div>
-  <div class="ai"><div class="an" style="color:var(--accent)">04</div><div class="ab"><div class="at">Smart money buying BTC via OTC at $66&ndash;72K (Wintermute)</div><div class="ad">Long-term funds quietly accumulating BTC at these levels for 18-month horizon. "Smart money diverges from ETF data." Counter-narrative to fear cycle.</div></div><span class="pill pill-blue" style="flex-shrink:0;margin-left:auto;align-self:flex-start">MEDIUM</span></div>
-  <div class="ai"><div class="an" style="color:var(--accent)">05</div><div class="ab"><div class="at">June 6 US Jobs Report &mdash; Pre-schedule both-scenario content</div><div class="ad">CoinDCX analysis confirms this as the next binary BTC catalyst. Prepare "soft jobs = recovery" and "strong jobs = watch $65K" posts now. Win the narrative race.</div></div><span class="pill pill-blue" style="flex-shrink:0;margin-left:auto;align-self:flex-start">MEDIUM</span></div>
-  <div class="sh" style="margin-top:1.2rem">Top 5 threats</div>
-  <div class="ai"><div class="an" style="color:var(--red)">T1</div><div class="ab"><div class="at">BTC potentially targeting $50K capitulation floor</div><div class="ad">Traders debating $50K next. 200-week MA at $60&ndash;61K is next major support. Prolonged bear could slash new installs &amp; volume 40&ndash;60%.</div></div></div>
-  <div class="ai"><div class="an" style="color:var(--red)">T2</div><div class="ab"><div class="at">Michael Saylor's Strategy selling BTC &mdash; triggering panic</div><div class="ad">Crypto.news reports Saylor's Strategy selling cited as key June 3 crash trigger. Needs a calm, data-driven ZebPay counter-narrative.</div></div></div>
-  <div class="ai"><div class="an" style="color:var(--red)">T3</div><div class="ab"><div class="at">AI stock rotation draining crypto ETF capital</div><div class="ad">Nasdaq/S&amp;P AI stocks added $21B+ in May while BTC ETFs bled $2.4B. BlackRock IBIT $527M single-day. Capital rotation risk is structural.</div></div></div>
-  <div class="ai"><div class="an" style="color:var(--red)">T4</div><div class="ab"><div class="at">Coinbase India + Binance equity service &mdash; accelerating threat</div><div class="ad">Coinbase got CFTC approval for perp futures. Binance launched $5 fractional equity service. Both deepening moats against Indian exchanges.</div></div></div>
-  <div class="ai"><div class="an" style="color:var(--red)">T5</div><div class="ab"><div class="at">India COINS Act &mdash; regulatory uncertainty persists</div><div class="ad">No single regulatory body yet. Income Tax, RBI, FIU overlapping. Retail confusion rising. ZebPay must be the clarity voice for Indian investors.</div></div></div>
-</div>
-<div class="src-col">
-  <div class="src-col-title">&#128240; Sources used &mdash; June 4 report</div>
-  <div class="src-item"><div class="src-domain">news.bitcoin.com</div><div class="src-desc">F&amp;G crashed to 11, BTC at $65,853, $50K debate, IBIT outflows</div><span class="pill pill-red">High Impact</span></div>
-  <div class="src-item"><div class="src-domain">bitrue.com/blog</div><div class="src-desc">BTC below $72K, $570M liquidations, 92% long liq., ETF outflow analysis</div><span class="pill pill-red">High Impact</span></div>
-  <div class="src-item"><div class="src-domain">bnnbloomberg.ca</div><div class="src-desc">ETF outflows, AI rotation, OTC accumulation, DV Chain institutional view</div><span class="pill pill-amber">Medium</span></div>
-  <div class="src-item"><div class="src-domain">blockchain.news</div><div class="src-desc">Santiment 2.23:1 bullish ratio &mdash; contrarian peak signal</div><span class="pill pill-amber">Medium</span></div>
-  <div class="src-item"><div class="src-domain">coinmarketcap.com</div><div class="src-desc">XRP CME 24/7 futures, Ripple DC expansion, whale 4yr low data</div><span class="pill pill-amber">Medium</span></div>
-  <div class="src-item"><div class="src-domain">crypto.news</div><div class="src-desc">Bull market crossroads, BTC dominance &lt;60%, Saylor selling cited</div><span class="pill pill-amber">Medium</span></div>
-  <div class="src-item"><div class="src-domain">bitrss.com</div><div class="src-desc">India COINS Act 2025, Parliamentary Committee, ZebPay in Parliament</div><span class="pill pill-blue">India</span></div>
-  <div class="src-item"><div class="src-domain">koinly.io/blog</div><div class="src-desc">India exchange comparison 2026, TDS compliance, FIU registration status</div><span class="pill pill-blue">India</span></div>
-  <div class="src-item"><div class="src-domain">coindcx.com/blog</div><div class="src-desc">BTC RSI 35, Fibonacci $67,182, June 6 jobs catalyst analysis</div><span class="pill pill-teal">Technical</span></div>
-  <div class="src-item"><div class="src-domain">stealthex.io/blog</div><div class="src-desc">BTC $66,650 Jun 3, $65,400 low, support levels, geopolitical pressure</div><span class="pill pill-teal">Technical</span></div>
-  <div class="src-item"><div class="src-domain">banklesstimes.com</div><div class="src-desc">BTC ascending trendline support, May ETF net outflow $2.4B worst of year</div><span class="pill pill-teal">Technical</span></div>
-  <div class="src-item"><div class="src-domain">hdfc-tru.com</div><div class="src-desc">CoinDCX HNI data: 3,500+ HNIs, Rs.50L avg monthly, 25&ndash;30% size increase</div><span class="pill pill-blue">India Data</span></div>
-</div>
-</div>
-</div>
+</aside>
 
-<!-- MARKET -->
-<div id="tab-market" class="panel">
-<div class="two-col">
-<div>
-  <div class="sh">6 key trends</div>
-  <div class="mc"><h4><span class="pill pill-red">Extreme Fear Capitulation Zone</span></h4>
-    <div class="sr"><span class="sl">Momentum</span><div class="sbg"><div class="sf fr" style="width:90%"></div></div><span class="sn">9/10</span></div>
-    <div class="sr"><span class="sl">SIP Opportunity</span><div class="sbg"><div class="sf fg" style="width:95%"></div></div><span class="sn">9.5/10</span></div>
-    <p style="margin-top:6px">F&amp;G dropped from 23 to 11 in a single day &mdash; sharpest single-day sentiment crash of 2026. BTC down 47% from ATH. Three consecutive red monthly candles. BTC dominance under 60%. Every prior sub-15 F&amp;G reading has been a strong medium-term entry point historically.</p>
-    <div class="ang"><div class="al">ZebPay angle</div><p>"Fear &amp; Greed hit 11. The last time it was this low, Bitcoin was Rs.30L. Today Rs.56L. Start your SIP before the recovery."</p></div>
+<!-- ── MAIN ── -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <h2 id="reportTitle">Daily Intelligence Report</h2>
+      <div class="date-display" id="reportDateDisplay">Select a date from the calendar</div>
+    </div>
+    <div class="topbar-right">
+      <div class="market-pill"><div class="dot-live"></div><span id="btcPrice">BTC $69,800</span></div>
+      <div class="status-pill fear" id="marketSentiment">Extreme Fear · 23</div>
+    </div>
   </div>
-  <div class="mc"><h4><span class="pill pill-red">BTC ETF Outflow Streak &mdash; 10 days / $2.97B</span></h4>
-    <div class="sr"><span class="sl">Risk Level</span><div class="sbg"><div class="sf fr" style="width:85%"></div></div><span class="sn">8.5/10</span></div>
-    <div class="sr"><span class="sl">Counter-Narrative</span><div class="sbg"><div class="sf fg" style="width:80%"></div></div><span class="sn">8/10</span></div>
-    <p style="margin-top:6px">BlackRock IBIT led redemptions with $527M in a single day. Longest outflow streak of 2026. Capital rotating into AI stocks. However, OTC desks (Wintermute) report long-term funds accumulating BTC at $66&ndash;72K for 18-month horizon &mdash; smart money divergence from ETF headline.</p>
-    <div class="ang"><div class="al">ZebPay angle</div><p>"ETF funds are selling. Long-term investors are buying quietly. SIP puts you on the right side of the trade automatically."</p></div>
-  </div>
-  <div class="mc"><h4><span class="pill pill-blue">India COINS Act 2025 &mdash; Parliamentary Push</span></h4>
-    <div class="sr"><span class="sl">Growth Potential</span><div class="sbg"><div class="sf fb" style="width:90%"></div></div><span class="sn">9/10</span></div>
-    <div class="sr"><span class="sl">Risk</span><div class="sbg"><div class="sf fa" style="width:30%"></div></div><span class="sn">3/10</span></div>
-    <p style="margin-top:6px">ZebPay, CoinDCX, CoinSwitch, WazirX and Binance met Parliament's Standing Committee on Finance. Committee formally studying "A Study on Virtual Digital Assets and Way Forward." India targeting Rs.100B Web3 economy by 2035. COINS Act dedicated regulatory body not yet materialized.</p>
-    <div class="ang"><div class="al">ZebPay angle</div><p>"ZebPay was in the room when India's crypto future was discussed. Here's what it means for your investments."</p></div>
-  </div>
-  <div class="mc"><h4><span class="pill pill-teal">XRP &mdash; CME 24/7 Futures + Ripple DC Expansion</span></h4>
-    <div class="sr"><span class="sl">Institutional Signal</span><div class="sbg"><div class="sf ft" style="width:80%"></div></div><span class="sn">8/10</span></div>
-    <div class="sr"><span class="sl">30-day Potential</span><div class="sbg"><div class="sf fg" style="width:75%"></div></div><span class="sn">7.5/10</span></div>
-    <p style="margin-top:6px">CME launched 24/7 XRP futures on June 3 with Ripple Prime. Ripple expanded DC policy office. Singapore's central bank testing XRP Ledger. XRP at $1.35 near key EMAs &mdash; needs $1.40 close to stabilize. Standard Chartered projects $8 XRP by end-2026. Whale withdrawals from Binance at 4-year low.</p>
-    <div class="ang"><div class="al">ZebPay angle</div><p>"CME just launched XRP futures. Banks are testing it. Here's why XRP is the payment rail of 2026."</p></div>
-  </div>
-  <div class="mc"><h4><span class="pill pill-amber">AI Stock Rotation &mdash; Crypto's Biggest Rival Capital</span></h4>
-    <div class="sr"><span class="sl">Threat Level</span><div class="sbg"><div class="sf fr" style="width:75%"></div></div><span class="sn">7.5/10</span></div>
-    <p style="margin-top:6px">Vanguard VOO and State Street SPYM added $21B+ in May while crypto ETFs bled. BTC-Dow correlation at 84% &mdash; this is macro, not crypto-specific. Nasdaq/S&amp;P gaining on AI/tech enthusiasm. The narrative around "AI vs crypto" capital rotation is real and needs a ZebPay counter-narrative.</p>
-    <div class="ang"><div class="al">ZebPay angle</div><p>"AI stocks are up. Crypto is down. Smart portfolios hold both. Here's why a BTC SIP alongside equities makes sense in 2026."</p></div>
-  </div>
-  <div class="mc"><h4><span class="pill pill-blue">US Jobs Report June 6 &mdash; Binary BTC Catalyst</span></h4>
-    <div class="sr"><span class="sl">Near-term Impact</span><div class="sbg"><div class="sf fb" style="width:85%"></div></div><span class="sn">8.5/10</span></div>
-    <p style="margin-top:6px">CoinDCX technical analysis specifically names June 6 US non-farm payrolls as the next major BTC catalyst. Soft jobs data = rate cut hopes = BTC recovery to $68K+. Strong jobs = Fed holds = BTC tests $65K support or lower. ZebPay should prepare real-time content for both outcomes right now.</p>
-    <div class="ang"><div class="al">ZebPay angle</div><p>Pre-write two posts today. Schedule both for June 6 AM. Win the narrative before competitors even wake up.</p></div>
-  </div>
-</div>
-<div class="src-col">
-  <div class="src-col-title">&#128240; Sources for trends</div>
-  <div class="src-item"><div class="src-domain">news.bitcoin.com</div><div class="src-desc">F&amp;G 11, BTC $65,853, $50K debate, IBIT outflow scale</div><span class="pill pill-red">Primary</span></div>
-  <div class="src-item"><div class="src-domain">crypto.news</div><div class="src-desc">Bull market crossroads, dominance &lt;60%, macro correlation 84%, Saylor</div><span class="pill pill-red">Primary</span></div>
-  <div class="src-item"><div class="src-domain">banklesstimes.com</div><div class="src-desc">May ETF outflow $2.4B worst of year, AI stock rotation $21B into Nasdaq</div><span class="pill pill-amber">Supporting</span></div>
-  <div class="src-item"><div class="src-domain">bitrss.com</div><div class="src-desc">India COINS Act, Parliamentary Committee, ZebPay + exchanges in Parliament</div><span class="pill pill-blue">India</span></div>
-  <div class="src-item"><div class="src-domain">coinmarketcap.com</div><div class="src-desc">XRP CME 24/7 futures, Ripple Prime, DC policy expansion (Jun 3)</div><span class="pill pill-teal">XRP</span></div>
-  <div class="src-item"><div class="src-domain">coindcx.com/blog</div><div class="src-desc">June 6 jobs catalyst, RSI 35, Fibonacci $67,182 support</div><span class="pill pill-teal">Technical</span></div>
-  <div class="src-item"><div class="src-domain">bnnbloomberg.ca</div><div class="src-desc">Wintermute OTC $66&ndash;72K accumulation, institutional 18-month view</div><span class="pill pill-blue">Institutional</span></div>
-</div>
-</div>
-</div>
 
-<!-- COMPETITORS -->
-<div id="tab-competitor" class="panel">
-<div class="two-col">
-<div>
-  <div class="sh">Competitor intelligence</div>
-  <div class="comp-g">
-    <div class="cc"><h4>CoinDCX <span class="pill pill-blue" style="font-size:9px">India's largest by volume</span></h4><div class="cc-d">Published XRP technical analysis and June 6 catalyst content &mdash; strong SEO play. Backed by Coinbase/B Capital at $2.1B valuation. 3,500+ HNI traders on platform, Rs.50L avg monthly. Strong educational content via DCX Learn. Fee war participant but feature depth maintained.</div><div class="opp"><div class="ol">ZebPay opportunity</div><p>They win on SEO analysis content. ZebPay wins on emotional SIP stories &mdash; real user journeys CoinDCX doesn't create. Beat them on trust and heart.</p></div></div>
-    <div class="cc"><h4>CoinSwitch <span class="pill pill-amber" style="font-size:9px">Largest by trading volume</span></h4><div class="cc-d">FIU-registered. Launched XRP, ETH, BTC options (1,100 contracts). Zero-fee API trading. TradingView integration. Some 2026 rankings cite CoinSwitch as India's largest by trading volume. Strong with advanced traders. Complex for beginners.</div><div class="opp"><div class="ol">ZebPay opportunity</div><p>Own the "simplest app" position. First-time investors find CoinSwitch overwhelming. CryptoPacks + SIP is the beginner answer to their complexity.</p></div></div>
-    <div class="cc"><h4>WazirX <span class="pill pill-red" style="font-size:9px">Still rebuilding trust</span></h4><div class="cc-d">Relaunched after $230M hack. Zero-fee survival strategy. Trust severely damaged. Brand recognition remains. Nischal Shetty active on X but community still cautious. Lost significant user base to CoinDCX and CoinSwitch during recovery.</div><div class="opp"><div class="ol">ZebPay opportunity</div><p>"12 years in India, zero security breaches of user funds." Run security-trust campaign targeting former WazirX users actively and immediately.</p></div></div>
-    <div class="cc"><h4>Binance <span class="pill pill-amber" style="font-size:9px">TradFi $5 equity service</span></h4><div class="cc-d">Launched retail fractional equity &mdash; 7,000+ US stocks/ETFs from $5. Not FIU-registered for India. Inconsistent TDS compliance. Aggressive global influencer marketing. New TradFi feature is a serious competitive moat expansion vs Indian exchanges.</div><div class="opp"><div class="ol">ZebPay opportunity</div><p>"Binance users in India face TDS non-compliance risk. ZebPay handles it automatically." Legal compliance as competitive moat.</p></div></div>
-    <div class="cc"><h4>Coinbase <span class="pill pill-red" style="font-size:9px">INR delayed &mdash; but coming</span></h4><div class="cc-d">Re-entered India with crypto-to-crypto trading resumed. INR support delayed until later 2026. Backed CoinDCX. CFTC approved for crypto perpetual futures globally (June 1). Biggest long-term structural threat to all Indian exchanges.</div><div class="opp"><div class="ol">ZebPay opportunity</div><p>"Built in India since 2014. We were here before Coinbase discovered India." Heritage + local trust narrative. Lock in users before INR launch.</p></div></div>
-    <div class="cc"><h4>Mudrex <span class="pill pill-teal" style="font-size:9px">SIP + baskets + staking</span></h4><div class="cc-d">Supports SIP across tokens and crypto baskets. Zero-fee baskets. 40+ staking tokens, no minimum. 1% redemption fee within 1 month. CEO active on RWA and stablecoin thought leadership. Growing institutional presence.</div><div class="opp"><div class="ol">ZebPay opportunity</div><p>"Mudrex has baskets. ZebPay has auto-rebalancing CryptoPacks." Feature comparison content &mdash; ZebPay's automation depth beats Mudrex.</p></div></div>
+  <div class="content-area" id="contentArea">
+    <!-- Content injected by JS -->
   </div>
-  <div class="sh" style="margin-top:.5rem">Content gap matrix</div>
-  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Topic</th><th>Competitor Strength</th><th>ZebPay Opportunity</th></tr></thead><tbody>
-    <tr><td>SIP during Extreme Fear</td><td>None running this</td><td><span class="pill pill-green">10/10 &mdash; Own it NOW</span></td></tr>
-    <tr><td>CryptoPacks rebalancing</td><td>None (ZebPay exclusive)</td><td><span class="pill pill-green">10/10 &mdash; Unique feature</span></td></tr>
-    <tr><td>ZebPay in Parliament / India regulation</td><td>None covering this angle</td><td><span class="pill pill-green">10/10 &mdash; Authority gap</span></td></tr>
-    <tr><td>Security / trust narrative</td><td>WazirX damaged, others neutral</td><td><span class="pill pill-teal">9/10</span></td></tr>
-    <tr><td>TDS / tax compliance</td><td>KoinX covers, others miss</td><td><span class="pill pill-blue">8/10 &mdash; Partner amplify</span></td></tr>
-    <tr><td>XRP CME futures explainer India</td><td>CoinDCX has technical post</td><td><span class="pill pill-blue">8/10 &mdash; Retail angle</span></td></tr>
-    <tr><td>June 6 jobs report impact on BTC</td><td>CoinDCX owns this</td><td><span class="pill pill-amber">6/10 &mdash; Pre-schedule</span></td></tr>
-  </tbody></table></div>
-</div>
-<div class="src-col">
-  <div class="src-col-title">&#128240; Sources for competitors</div>
-  <div class="src-item"><div class="src-domain">koinly.io/blog</div><div class="src-desc">India exchange 2026 comparison, TDS compliance, FIU status all exchanges</div><span class="pill pill-blue">India</span></div>
-  <div class="src-item"><div class="src-domain">cryptonews.com</div><div class="src-desc">CoinSwitch features, Coinbase India re-entry timeline, WazirX fallout</div><span class="pill pill-amber">Supporting</span></div>
-  <div class="src-item"><div class="src-domain">investingnews.com</div><div class="src-desc">Coinbase CFTC approval Jun 1, Binance equity service from $5 launch</div><span class="pill pill-teal">Global</span></div>
-  <div class="src-item"><div class="src-domain">coincodex.com</div><div class="src-desc">Best crypto exchanges India 2026, ZebPay, KuCoin FIU registration</div><span class="pill pill-blue">India</span></div>
-  <div class="src-item"><div class="src-domain">hdfc-tru.com</div><div class="src-desc">CoinDCX HNI data, family office participation, Rs.50L avg monthly</div><span class="pill pill-blue">India Data</span></div>
-  <div class="src-item"><div class="src-domain">ventureburn.com</div><div class="src-desc">CoinDCX unicorn $2.1B, DCX Learn, fee structure overview</div><span class="pill pill-amber">Supporting</span></div>
-</div>
-</div>
-</div>
-
-<!-- NARRATIVES -->
-<div id="tab-narratives" class="panel">
-<div class="two-col">
-<div>
-  <div class="sh">Narrative momentum scores &mdash; June 4, 2026</div>
-  <div class="tbl-wrap"><div style="padding:.55rem .85rem">
-    <div class="narr-row"><div class="nn">Bitcoin / Digital Gold</div><div class="nbg"><div class="mr"><span class="ml">Score</span><div class="mb"><div class="mf fb" style="width:85%"></div></div></div><div class="mr"><span class="ml">Retail</span><div class="mb"><div class="mf ft" style="width:88%"></div></div></div><div class="mr"><span class="ml">Institutional</span><div class="mb"><div class="mf fg" style="width:85%"></div></div></div></div><div style="flex-shrink:0"><span class="pill pill-blue">8.5/10</span></div></div>
-    <div class="narr-row"><div class="nn">SIP / DCA Investing</div><div class="nbg"><div class="mr"><span class="ml">Score</span><div class="mb"><div class="mf fg" style="width:95%"></div></div></div><div class="mr"><span class="ml">Retail demand</span><div class="mb"><div class="mf fg" style="width:95%"></div></div></div><div class="mr"><span class="ml">Fear markets</span><div class="mb"><div class="mf fg" style="width:98%"></div></div></div></div><div style="flex-shrink:0"><span class="pill pill-green">9.5/10 &#128293;</span></div></div>
-    <div class="narr-row"><div class="nn">India Regulation</div><div class="nbg"><div class="mr"><span class="ml">Score</span><div class="mb"><div class="mf fb" style="width:85%"></div></div></div><div class="mr"><span class="ml">Retail</span><div class="mb"><div class="mf fa" style="width:55%"></div></div></div><div class="mr"><span class="ml">Institutional</span><div class="mb"><div class="mf fb" style="width:90%"></div></div></div></div><div style="flex-shrink:0"><span class="pill pill-blue">8.5/10 &#8593;</span></div></div>
-    <div class="narr-row"><div class="nn">XRP / Payment Rails</div><div class="nbg"><div class="mr"><span class="ml">Score</span><div class="mb"><div class="mf ft" style="width:80%"></div></div></div><div class="mr"><span class="ml">Retail</span><div class="mb"><div class="mf ft" style="width:78%"></div></div></div><div class="mr"><span class="ml">Institutional</span><div class="mb"><div class="mf fb" style="width:85%"></div></div></div></div><div style="flex-shrink:0"><span class="pill pill-teal">8/10 &#8593;</span></div></div>
-    <div class="narr-row"><div class="nn">ETF Outflow Narrative</div><div class="nbg"><div class="mr"><span class="ml">Attention</span><div class="mb"><div class="mf fr" style="width:95%"></div></div></div><div class="mr"><span class="ml">ZebPay opp.</span><div class="mb"><div class="mf fg" style="width:95%"></div></div></div></div><div style="flex-shrink:0"><span class="pill pill-red">9/10 (opp)</span></div></div>
-    <div class="narr-row"><div class="nn">AI + Crypto Infra</div><div class="nbg"><div class="mr"><span class="ml">Score</span><div class="mb"><div class="mf ft" style="width:75%"></div></div></div><div class="mr"><span class="ml">Retail</span><div class="mb"><div class="mf ft" style="width:70%"></div></div></div><div class="mr"><span class="ml">Institutional</span><div class="mb"><div class="mf fg" style="width:80%"></div></div></div></div><div style="flex-shrink:0"><span class="pill pill-teal">7.5/10</span></div></div>
-    <div class="narr-row"><div class="nn">Stablecoins / Payments</div><div class="nbg"><div class="mr"><span class="ml">Score</span><div class="mb"><div class="mf fg" style="width:80%"></div></div></div><div class="mr"><span class="ml">Retail</span><div class="mb"><div class="mf ft" style="width:65%"></div></div></div><div class="mr"><span class="ml">Institutional</span><div class="mb"><div class="mf fg" style="width:90%"></div></div></div></div><div style="flex-shrink:0"><span class="pill pill-green">8/10</span></div></div>
-    <div class="narr-row"><div class="nn">RWA Tokenization</div><div class="nbg"><div class="mr"><span class="ml">Score</span><div class="mb"><div class="mf fp" style="width:72%"></div></div></div><div class="mr"><span class="ml">Retail</span><div class="mb"><div class="mf fa" style="width:45%"></div></div></div><div class="mr"><span class="ml">Institutional</span><div class="mb"><div class="mf fg" style="width:88%"></div></div></div></div><div style="flex-shrink:0"><span class="pill pill-amber">7.2/10</span></div></div>
-    <div class="narr-row"><div class="nn">Memecoins</div><div class="nbg"><div class="mr"><span class="ml">Score</span><div class="mb"><div class="mf fa" style="width:45%"></div></div></div><div class="mr"><span class="ml">Retail</span><div class="mb"><div class="mf fa" style="width:65%"></div></div></div><div class="mr"><span class="ml">Institutional</span><div class="mb"><div class="mf fr" style="width:15%"></div></div></div></div><div style="flex-shrink:0"><span class="pill pill-amber">4.5/10 &#8595;</span></div></div>
-  </div></div>
-  <div class="alert"><p>&#128293; Hottest narrative for ZebPay today: "SIP in Extreme Fear" &mdash; F&amp;G at 11 makes this the single most powerful retail conversion moment of 2026. Secondary: XRP CME 24/7 futures (institutional signal) + India COINS Act positioning (authority builder).</p></div>
-</div>
-<div class="src-col">
-  <div class="src-col-title">&#128240; Sources for narratives</div>
-  <div class="src-item"><div class="src-domain">blockchain.news</div><div class="src-desc">Santiment 2.23:1 bullish ratio &mdash; contrarian SIP signal confirmed</div><span class="pill pill-red">Primary</span></div>
-  <div class="src-item"><div class="src-domain">kucoin.com/news</div><div class="src-desc">10-day ETF outflow streak, F&amp;G 23 baseline, bear comparison analysis</div><span class="pill pill-amber">Supporting</span></div>
-  <div class="src-item"><div class="src-domain">outlookindia.com</div><div class="src-desc">XRP to outperform BTC+ETH in 2026, regulatory tailwinds, ETF flows</div><span class="pill pill-teal">XRP</span></div>
-  <div class="src-item"><div class="src-domain">coinpedia.org</div><div class="src-desc">2026 institutional forecasts: JPM $170K, SC $150K, ETF AUM $220B target</div><span class="pill pill-blue">Institutional</span></div>
-  <div class="src-item"><div class="src-domain">bitrss.com</div><div class="src-desc">India COINS Act, Rs.100B Web3 economy target 2035, regulatory body pending</div><span class="pill pill-blue">India</span></div>
-</div>
-</div>
-</div>
-
-<!-- PRICE -->
-<div id="tab-price" class="panel">
-<div class="two-col">
-<div>
-  <div class="sh">Price intelligence &mdash; probability scenarios (not financial advice)</div>
-  <div class="mc"><h4 style="justify-content:space-between">Bitcoin (BTC) <span class="pill pill-red">~$66,650</span></h4>
-    <p style="margin-top:4px;font-size:11px;line-height:1.6">RSI ~35 (oversold approaching). Below 20/50/100-day EMAs &mdash; bearish structure. Fibonacci 61.8% retracement at $67,182. Support: $65K &rarr; $60&ndash;61K (200wk MA) &rarr; $50K (capitulation debate). Resistance: $68K&ndash;$70K. June 6 US NFP is binary catalyst. OTC smart money (Wintermute) accumulating at $66&ndash;72K for 18-month horizon.</p>
-    <div style="font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:.5rem 0 3px">7 Day</div>
-    <div class="pb"><div class="pb-c bull"><div class="pc">Bull</div><div class="pr">$69K&ndash;72K</div></div><div class="pb-c base"><div class="pc">Base</div><div class="pr">$65K&ndash;68K</div></div><div class="pb-c bear"><div class="pc">Bear</div><div class="pr">$58K&ndash;62K</div></div></div>
-    <div style="font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:.35rem 0 3px">30 Day</div>
-    <div class="pb"><div class="pb-c bull"><div class="pc">Bull</div><div class="pr">$75K&ndash;80K</div></div><div class="pb-c base"><div class="pc">Base</div><div class="pr">$66K&ndash;72K</div></div><div class="pb-c bear"><div class="pc">Bear</div><div class="pr">$55K&ndash;62K</div></div></div>
-    <div style="font-size:9px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin:.35rem 0 3px">90 Day</div>
-    <div class="pb"><div class="pb-c bull"><div class="pc">Bull</div><div class="pr">$95K&ndash;115K</div></div><div class="pb-c base"><div class="pc">Base</div><div class="pr">$75K&ndash;88K</div></div><div class="pb-c bear"><div class="pc">Bear</div><div class="pr">$48K&ndash;58K</div></div></div>
-  </div>
-  <div class="mc"><h4 style="justify-content:space-between">Ethereum (ETH) <span class="pill pill-amber">~$2,006</span></h4>
-    <p style="margin-top:4px;font-size:11px;line-height:1.6">Holding $2K psychological level. ETH underperformed BTC in May before recovering. RWA tokenization and CLARITY Act provide institutional support. Watch $1,900 as breakdown level.</p>
-    <div class="pb"><div class="pb-c bull"><div class="pc">30d Bull</div><div class="pr">$2,300&ndash;2,600</div></div><div class="pb-c base"><div class="pc">30d Base</div><div class="pr">$1,900&ndash;2,200</div></div><div class="pb-c bear"><div class="pc">30d Bear</div><div class="pr">$1,500&ndash;1,800</div></div></div>
-  </div>
-  <div class="mc"><h4 style="justify-content:space-between">XRP <span class="pill pill-teal">~$1.35</span></h4>
-    <p style="margin-top:4px;font-size:11px;line-height:1.6">Near key EMAs. Needs $1.40 daily close to stabilize. CME 24/7 futures live. Singapore central bank testing XRP Ledger. Whale withdrawals from Binance at 4-year low (978M XRP/30d). Standard Chartered target: $8 by end-2026.</p>
-    <div class="pb"><div class="pb-c bull"><div class="pc">30d Bull</div><div class="pr">$1.65&ndash;2.10</div></div><div class="pb-c base"><div class="pc">30d Base</div><div class="pr">$1.25&ndash;1.55</div></div><div class="pb-c bear"><div class="pc">30d Bear</div><div class="pr">$0.90&ndash;1.15</div></div></div>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:.65rem">
-    <div class="mc"><h4>Solana (SOL) <span class="pill pill-amber" style="font-size:9px">~$75</span></h4><p style="font-size:11px;line-height:1.5">SOL ETF inflows continued in May when others fell. NEAR outperforming as AI L1 narrative competitor. Watch for recovery on macro turn.</p><div class="pb"><div class="pb-c bull"><div class="pc">Bull</div><div class="pr">$90&ndash;105</div></div><div class="pb-c base"><div class="pc">Base</div><div class="pr">$72&ndash;85</div></div><div class="pb-c bear"><div class="pc">Bear</div><div class="pr">$52&ndash;65</div></div></div></div>
-    <div class="mc"><h4>DOGE / ADA <span class="pill pill-red" style="font-size:9px">Weak</span></h4><p style="font-size:11px;line-height:1.5">DOGE lost top-10 to HYPE token. ADA at $0.21. Memecoin narrative cooling in fear environment. Opportunistic only in bull scenario.</p><div class="pb"><div class="pb-c bull"><div class="pc">Bull</div><div class="pr">DOGE $0.13+</div></div><div class="pb-c base"><div class="pc">Base</div><div class="pr">Sideways</div></div><div class="pb-c bear"><div class="pc">Bear</div><div class="pr">New lows</div></div></div></div>
-  </div>
-</div>
-<div class="src-col">
-  <div class="src-col-title">&#128240; Sources for price intel</div>
-  <div class="src-item"><div class="src-domain">coindcx.com/blog</div><div class="src-desc">RSI 35, EMAs bearish, Fibonacci $67,182, June 6 jobs report catalyst</div><span class="pill pill-teal">Technical</span></div>
-  <div class="src-item"><div class="src-domain">stealthex.io/blog</div><div class="src-desc">BTC $66,650 Jun 3, $65,400 intraday low, support $65K/$60&ndash;61K</div><span class="pill pill-red">Primary</span></div>
-  <div class="src-item"><div class="src-domain">bitrue.com/blog</div><div class="src-desc">ETF analysis, $570M liquidations, 75.6% long positions</div><span class="pill pill-amber">Supporting</span></div>
-  <div class="src-item"><div class="src-domain">banklesstimes.com</div><div class="src-desc">BTC ascending trendline support, Feb/Mar/May low connections</div><span class="pill pill-teal">Technical</span></div>
-  <div class="src-item"><div class="src-domain">coinpedia.org</div><div class="src-desc">JPM $170K, Standard Chartered $150K, Fundstrat $200K institutional forecasts</div><span class="pill pill-blue">Institutional</span></div>
-  <div class="src-item"><div class="src-domain">outlookindia.com</div><div class="src-desc">Standard Chartered XRP $8 target 2026, 3x rally analysis</div><span class="pill pill-teal">XRP</span></div>
-  <div class="src-item"><div class="src-domain">bnnbloomberg.ca</div><div class="src-desc">OTC accumulation at $66&ndash;72K, Wintermute 18-month smart money view</div><span class="pill pill-blue">Institutional</span></div>
-  <div class="src-item"><div class="src-domain">coinmarketcap.com</div><div class="src-desc">XRP whale activity 4yr low, 978M XRP 30-day Binance withdrawals</div><span class="pill pill-teal">On-chain</span></div>
-</div>
-</div>
-</div>
-
-<!-- NEWS FEED -->
-<div id="tab-news" class="panel">
-<div class="two-col">
-<div>
-  <div class="sh">News feed &mdash; June 3&ndash;4, 2026 classified by impact</div>
-  <div class="ni"><div class="nh">Fear &amp; Greed Index crashes to 11 &mdash; lowest of 2026</div><div class="nm"><span class="pill pill-red">High Impact</span><span>news.bitcoin.com</span><span>Jun 3, 2026</span></div><div class="nb">BTC at $65,853 at 1pm EDT. F&amp;G fell from 23 to 11 in a single day &mdash; the sharpest single-day sentiment crash of the year. Traders openly debating $50K floor. IBIT leading outflows with over $600M in single-day redemptions. 200-week MA at $60&ndash;61K is the next major technical support if $65K breaks.</div></div>
-  <div class="ni"><div class="nh">BTC $570M liquidation cascade &mdash; 92% were forced long liquidations</div><div class="nm"><span class="pill pill-red">High Impact</span><span>bitrue.com/blog</span><span>Jun 2, 2026</span></div><div class="nb">Crypto derivatives recorded $570.99M in liquidations. 75.6% from long positions. Long liquidation rate exceeded 92% in four-hour windows &mdash; a broad deleveraging event, not fundamental selling. Forced selling typically sets up near-term buying opportunities. ZebPay counter-narrative: SIP users were unaffected.</div></div>
-  <div class="ni"><div class="nh">CME launches 24/7 XRP futures with Ripple Prime as partner</div><div class="nm"><span class="pill pill-amber">Medium Impact</span><span>coinmarketcap.com</span><span>Jun 3, 2026</span></div><div class="nb">Regulated round-the-clock XRP futures trading begins. This is a major institutional access milestone &mdash; hedge funds and institutions can now trade XRP derivatives outside US market hours. Ripple simultaneously expanding DC policy office to engage regulators on digital asset legislation.</div></div>
-  <div class="ni"><div class="nh">India exchanges meet Parliament Finance Committee &mdash; COINS Act discussed</div><div class="nm"><span class="pill pill-amber">Medium Impact</span><span>bitrss.com</span><span>Jun 2, 2026</span></div><div class="nb">ZebPay, CoinDCX, CoinSwitch, WazirX and Binance met Parliament's Standing Committee on Finance in New Delhi. Committee formally studying "A Study on Virtual Digital Assets and Way Forward." India targeting Rs.100B Web3 economy by 2035. COINS Act regulatory body not yet materialized but institutional momentum is real and accelerating.</div></div>
-  <div class="ni"><div class="nh">Santiment: Bitcoin social sentiment at 2026 peak &mdash; contrarian warning</div><div class="nm"><span class="pill pill-amber">Medium Impact</span><span>blockchain.news / kucoin.com</span><span>Jun 1&ndash;2, 2026</span></div><div class="nb">Bullish Bitcoin comments at 2.23:1 ratio &mdash; most bullish reading of the year. Santiment notes last two such peaks preceded short-term pullbacks. This contrarian signal, combined with F&amp;G 11, suggests extreme divergence between retail hope and institutional positioning. ZebPay content opportunity: calm, data-driven "what this means for your SIP" post.</div></div>
-  <div class="ni"><div class="nh">Coinbase approved by CFTC for crypto perpetual futures globally</div><div class="nm"><span class="pill pill-amber">Medium Impact</span><span>investingnews.com</span><span>Jun 1, 2026</span></div><div class="nb">CFTC approval positions Coinbase as a global derivatives exchange. Combined with India re-entry (crypto-to-crypto resumed, INR delayed), this deepens their long-term structural threat to Indian exchanges. ZebPay should accelerate user habit locking via SIP streaks and earn programs before INR integration completes.</div></div>
-  <div class="ni"><div class="nh">Binance launches retail fractional equity service &mdash; 7,000+ US stocks from $5</div><div class="nm"><span class="pill pill-blue">Low-Medium Impact</span><span>investingnews.com</span><span>Jun 1, 2026</span></div><div class="nb">Binance expanding to TradFi with retail fractional equity slices. Positioning as all-in-one financial super-app. Not FIU-registered in India but significant competitive moat development. Indian exchanges should monitor this product direction carefully.</div></div>
-  <div class="ni"><div class="nh">OTC desks report quiet BTC accumulation at $66&ndash;72K</div><div class="nm"><span class="pill pill-blue">Medium Impact</span><span>bnnbloomberg.ca / coinmarketcap.com</span><span>Jun 2, 2026</span></div><div class="nb">Wintermute reports long-term funds discreetly buying BTC at $72K via OTC for 18-month horizon, splitting orders to avoid market impact. BTC ETFs see $2B combined outflows but OTC accumulation data is diverging. Smart money signal vs retail fear divergence &mdash; powerful ZebPay SIP content angle.</div></div>
-</div>
-<div class="src-col">
-  <div class="src-col-title">&#128240; All news sources</div>
-  <div class="src-item"><div class="src-domain">news.bitcoin.com</div><div class="src-desc">F&amp;G 11, IBIT outflows, $50K debate, BTC $65,853 live data</div><span class="pill pill-red">High Impact</span></div>
-  <div class="src-item"><div class="src-domain">bitrue.com/blog</div><div class="src-desc">$570M liquidations, 92% long liquidations, ETF outflow deep dive</div><span class="pill pill-red">High Impact</span></div>
-  <div class="src-item"><div class="src-domain">coinmarketcap.com</div><div class="src-desc">XRP CME futures, Ripple Prime, DC policy, whale data, OTC accumulation</div><span class="pill pill-amber">Medium</span></div>
-  <div class="src-item"><div class="src-domain">bitrss.com</div><div class="src-desc">India COINS Act, Parliamentary Committee meeting, ZebPay in Parliament</div><span class="pill pill-blue">India</span></div>
-  <div class="src-item"><div class="src-domain">investingnews.com</div><div class="src-desc">Coinbase CFTC approval, Binance equity service, June 1 market recap</div><span class="pill pill-amber">Medium</span></div>
-  <div class="src-item"><div class="src-domain">blockchain.news</div><div class="src-desc">Santiment 2.23:1 sentiment ratio, contrarian peak signal analysis</div><span class="pill pill-amber">Sentiment</span></div>
-  <div class="src-item"><div class="src-domain">bnnbloomberg.ca</div><div class="src-desc">OTC accumulation, DV Chain interview, institutional long-term view</div><span class="pill pill-blue">Institutional</span></div>
-  <div class="src-item"><div class="src-domain">crypto.news</div><div class="src-desc">Bull market crossroads, Saylor selling cited, macro correlation 84%</div><span class="pill pill-red">High Impact</span></div>
-  <div class="src-item"><div class="src-domain">stealthex.io/blog</div><div class="src-desc">BTC price drop analysis, US-Iran geopolitical pressure data</div><span class="pill pill-amber">Supporting</span></div>
-</div>
-</div>
-</div>
-
-<!-- CONTENT -->
-<div id="tab-content" class="panel">
-<div class="two-col">
-<div>
-  <div class="sh">Top 10 reel ideas for June 4, 2026</div>
-  <div class="tbl-wrap"><table class="tbl"><thead><tr><th style="width:30px">#</th><th style="width:22%">Topic</th><th style="width:28%">Hook</th><th>Why it works</th><th style="width:55px">Diff</th></tr></thead><tbody>
-    <tr><td style="font-family:'DM Mono',monospace;color:var(--text2);font-size:10px">01</td><td>Fear &amp; Greed hit 11 &mdash; what happens next</td><td style="font-style:italic;color:var(--text2);font-size:10px">"Last time it was this low, BTC was Rs.30L. Today Rs.56L."</td><td>Timely, data-driven, converts fear to SIP action immediately</td><td><span class="pill pill-green">Easy</span></td></tr>
-    <tr><td style="font-family:'DM Mono',monospace;color:var(--text2);font-size:10px">02</td><td>Rs.100/day SIP vs panic selling &mdash; 2 years later</td><td style="font-style:italic;color:var(--text2);font-size:10px">"Two people. Same market crash. Very different outcomes."</td><td>Storytelling + data + emotional resonance for India</td><td><span class="pill pill-green">Easy</span></td></tr>
-    <tr><td style="font-family:'DM Mono',monospace;color:var(--text2);font-size:10px">03</td><td>BlackRock is selling BTC. Smart money buying OTC.</td><td style="font-style:italic;color:var(--text2);font-size:10px">"The ETF data you're seeing is not the full story."</td><td>Contrarian + insider knowledge narrative. High share value.</td><td><span class="pill pill-amber">Medium</span></td></tr>
-    <tr><td style="font-family:'DM Mono',monospace;color:var(--text2);font-size:10px">04</td><td>CME launched XRP futures 24/7 &mdash; explained</td><td style="font-style:italic;color:var(--text2);font-size:10px">"Banks can now trade XRP any time. Here's why that matters."</td><td>Institutional milestone, high share value, XRP community</td><td><span class="pill pill-green">Easy</span></td></tr>
-    <tr><td style="font-family:'DM Mono',monospace;color:var(--text2);font-size:10px">05</td><td>ZebPay was in India's Parliament this week</td><td style="font-style:italic;color:var(--text2);font-size:10px">"India is writing its crypto future. We were in the room."</td><td>Authority + trust + India-first pride narrative</td><td><span class="pill pill-green">Easy</span></td></tr>
-    <tr><td style="font-family:'DM Mono',monospace;color:var(--text2);font-size:10px">06</td><td>What happens after every F&amp;G reading below 15?</td><td style="font-style:italic;color:var(--text2);font-size:10px">"We checked. Every. Single. Time."</td><td>Historical data hook. Builds hope in fear. High shareability.</td><td><span class="pill pill-amber">Medium</span></td></tr>
-    <tr><td style="font-family:'DM Mono',monospace;color:var(--text2);font-size:10px">07</td><td>Rs.570M forced to sell BTC today &mdash; not by choice</td><td style="font-style:italic;color:var(--text2);font-size:10px">"92% of today's selling was liquidations. SIP investors chose differently."</td><td>Explains market mechanics, positions SIP as the rational choice</td><td><span class="pill pill-amber">Medium</span></td></tr>
-    <tr><td style="font-family:'DM Mono',monospace;color:var(--text2);font-size:10px">08</td><td>India + Crypto: What Parliament discussed this week</td><td style="font-style:italic;color:var(--text2);font-size:10px">"India wants a Rs.100 billion crypto economy. Here's the plan."</td><td>News hook + ZebPay credibility + India national pride</td><td><span class="pill pill-green">Easy</span></td></tr>
-    <tr><td style="font-family:'DM Mono',monospace;color:var(--text2);font-size:10px">09</td><td>BTC down 47% from ATH. AI stocks up. Here's how to hold both.</td><td style="font-style:italic;color:var(--text2);font-size:10px">"Why smart portfolios hold AI stocks and crypto SIP together."</td><td>Macro cross-asset narrative. Highly shareable among finance audience.</td><td><span class="pill pill-amber">Medium</span></td></tr>
-    <tr><td style="font-family:'DM Mono',monospace;color:var(--text2);font-size:10px">10</td><td>June 6 jobs report = BTC's next big moment</td><td style="font-style:italic;color:var(--text2);font-size:10px">"One US number on Friday could change Bitcoin's trajectory. Here's what to watch."</td><td>Anticipation hook. Drives app opens and alert sign-ups on June 6.</td><td><span class="pill pill-green">Easy</span></td></tr>
-  </tbody></table></div>
-  <div class="sh" style="margin-top:1rem">Top 5 Twitter/X posts for today</div>
-  <div class="ai"><div class="an" style="color:var(--blue)">T1</div><div class="ab"><div class="at">Fear &amp; Greed: 11. Our SIP users? Still DCA-ing.</div><div class="ad">"The index just hit its lowest reading of 2026. Every previous F&amp;G sub-15 preceded strong 6-month returns. Data over panic." Include historical F&amp;G recovery chart. Source: news.bitcoin.com</div></div></div>
-  <div class="ai"><div class="an" style="color:var(--blue)">T2</div><div class="ab"><div class="at">Contrarian: $570M was FORCED selling today.</div><div class="ad">"92% of today's crypto selling came from leveraged long liquidations &mdash; not retail fear. When the forced selling ends, who's left? Buyers. Thread." Source: bitrue.com/blog</div></div></div>
-  <div class="ai"><div class="an" style="color:var(--blue)">T3</div><div class="ab"><div class="at">ZebPay was in Parliament this week.</div><div class="ad">"India's Finance Committee is formally studying crypto regulation. ZebPay was there. India wants a Rs.100B Web3 economy by 2035. We're building it." Source: bitrss.com</div></div></div>
-  <div class="ai"><div class="an" style="color:var(--blue)">T4</div><div class="ab"><div class="at">CME just launched 24/7 XRP futures. Ripple Prime is the partner.</div><div class="ad">"Banks can now trade XRP round the clock. Singapore's central bank is testing XRP for settlements. The payment rail narrative is real. Here's how to position on ZebPay." Source: coinmarketcap.com</div></div></div>
-  <div class="ai"><div class="an" style="color:var(--blue)">T5</div><div class="ab"><div class="at">Friday June 6 US jobs report. BTC's next binary moment.</div><div class="ad">"Soft jobs data = rate cut hopes = BTC recovery. Strong jobs = Fed holds = watch $65K support. We'll be posting real-time. Enable ZebPay price alerts now." Source: coindcx.com/blog</div></div></div>
-</div>
-<div class="src-col">
-  <div class="src-col-title">&#128240; Sources informing content</div>
-  <div class="src-item"><div class="src-domain">news.bitcoin.com</div><div class="src-desc">F&amp;G 11 data point &mdash; powers reels 01, 06, tweet T1</div><span class="pill pill-red">Primary</span></div>
-  <div class="src-item"><div class="src-domain">bitrue.com/blog</div><div class="src-desc">92% long liquidations stat &mdash; powers reel 07, tweet T2</div><span class="pill pill-amber">Data</span></div>
-  <div class="src-item"><div class="src-domain">bitrss.com</div><div class="src-desc">India Parliament meeting &mdash; powers reels 05, 08, tweet T3</div><span class="pill pill-blue">India</span></div>
-  <div class="src-item"><div class="src-domain">coinmarketcap.com</div><div class="src-desc">CME XRP 24/7 futures &mdash; powers reel 04, tweet T4</div><span class="pill pill-teal">XRP</span></div>
-  <div class="src-item"><div class="src-domain">bnnbloomberg.ca</div><div class="src-desc">OTC smart money accumulation &mdash; powers reel 03</div><span class="pill pill-blue">Institutional</span></div>
-  <div class="src-item"><div class="src-domain">coindcx.com/blog</div><div class="src-desc">June 6 jobs catalyst &mdash; powers reel 10, tweet T5</div><span class="pill pill-teal">Catalyst</span></div>
-  <div class="src-item"><div class="src-domain">stealthex.io</div><div class="src-desc">BTC 47% from ATH data point &mdash; powers reel 09</div><span class="pill pill-amber">Data</span></div>
-</div>
-</div>
-</div>
-
-<!-- FEATURES -->
-<div id="tab-features" class="panel">
-<div class="two-col">
-<div>
-  <div class="sh">Trend &rarr; ZebPay feature mapping</div>
-  <div class="fc"><h4>F&amp;G = 11 Extreme Fear Correction</h4><div class="tag-row"><span class="pill pill-blue">Bitcoin SIP</span><span class="pill pill-teal">CryptoPacks</span><span class="pill pill-green">Auto-Invest</span></div><div class="cta"><div class="cl">Suggested CTA</div><p>"Fear &amp; Greed just hit 11. This is when SIP investors win. Start your Bitcoin SIP from Rs.100/day &mdash; no timing needed."</p></div><div class="rt">&#128161; Reel: Split screen &mdash; panic seller refreshing app vs SIP investor continuing DCA. Show 6-month returns comparison. Sourced from news.bitcoin.com F&amp;G data.</div></div>
-  <div class="fc"><h4>Leverage Liquidation Cascade ($570M)</h4><div class="tag-row"><span class="pill pill-teal">CryptoPacks Rebalancing</span><span class="pill pill-blue">No-Leverage SIP</span></div><div class="cta"><div class="cl">Suggested CTA</div><p>"Rs.570M in forced selling happened today because of leverage. CryptoPacks rebalances automatically &mdash; no margin calls, ever."</p></div><div class="rt">&#128161; Reel: Explainer on liquidations + why SIP users are protected. Builds trust + educates. Sourced from bitrue.com/blog 92% liquidation data.</div></div>
-  <div class="fc"><h4>XRP CME Futures &mdash; Institutional Expansion</h4><div class="tag-row"><span class="pill pill-amber">XRP Trading</span><span class="pill pill-blue">XRP SIP</span></div><div class="cta"><div class="cl">Suggested CTA</div><p>"CME launched 24/7 XRP futures. Institutions are getting serious. Trade XRP on ZebPay with INR pairs &mdash; no conversion needed."</p></div><div class="rt">&#128161; Reel: "What CME XRP futures mean for everyday Indian investors" &mdash; 60-second explainer with ZebPay CTA. Sourced from coinmarketcap.com.</div></div>
-  <div class="fc"><h4>India COINS Act / ZebPay in Parliament</h4><div class="tag-row"><span class="pill pill-red">Trust Campaign</span><span class="pill pill-teal">ZebPay &times; KoinX</span><span class="pill pill-blue">FIU-Registered</span></div><div class="cta"><div class="cl">Suggested CTA</div><p>"ZebPay was in India's Parliament this week. FIU-registered. TDS auto-handled. Trade where India's lawmakers know you'll be protected."</p></div><div class="rt">&#128161; Reel: "What India's crypto regulation means for your portfolio" &mdash; authority builder. Sourced from bitrss.com.</div></div>
-  <div class="fc"><h4>June 6 Jobs Report Binary Catalyst</h4><div class="tag-row"><span class="pill pill-blue">Market Alerts</span><span class="pill pill-amber">Quick Trade</span></div><div class="cta"><div class="cl">Suggested CTA</div><p>"Crypto's next big move depends on one number on June 6. Enable price alerts on ZebPay &mdash; be the first to react."</p></div><div class="rt">&#128161; Reel pre-scheduled June 5: "Tomorrow's jobs report could send BTC up or down 10%. Here's your playbook." Drives app opens. Sourced from coindcx.com/blog.</div></div>
-  <div class="fc"><h4>New Investor Wave (Fear &rarr; Curiosity)</h4><div class="tag-row"><span class="pill pill-teal">CryptoPacks</span><span class="pill pill-blue">Bitcoin SIP</span><span class="pill pill-green">Beginner Mode</span></div><div class="cta"><div class="cl">Suggested CTA</div><p>"Heard about crypto crashing and got curious? Start with Rs.100 and a diversified CryptoPack. No jargon. No stress. Just ZebPay."</p></div><div class="rt">&#128161; Reel: "Everyone's talking about crypto crashing. Here's what a beginner should actually do right now." Zero-to-first-investment guide.</div></div>
-</div>
-<div class="src-col">
-  <div class="src-col-title">&#128240; Sources for feature mapping</div>
-  <div class="src-item"><div class="src-domain">news.bitcoin.com</div><div class="src-desc">F&amp;G 11 &mdash; justifies SIP urgency and fear&rarr;opportunity mapping for Feature 1</div><span class="pill pill-red">Primary</span></div>
-  <div class="src-item"><div class="src-domain">bitrue.com/blog</div><div class="src-desc">Liquidation data &mdash; powers Feature 2 no-leverage messaging</div><span class="pill pill-amber">Data</span></div>
-  <div class="src-item"><div class="src-domain">coinmarketcap.com</div><div class="src-desc">XRP CME futures &mdash; institutional signal for Feature 3 XRP promotion</div><span class="pill pill-teal">XRP</span></div>
-  <div class="src-item"><div class="src-domain">bitrss.com</div><div class="src-desc">India Parliamentary meeting &mdash; trust + compliance narrative for Feature 4</div><span class="pill pill-blue">India</span></div>
-  <div class="src-item"><div class="src-domain">coindcx.com/blog</div><div class="src-desc">June 6 jobs catalyst &mdash; market alert + quick trade feature activation</div><span class="pill pill-teal">Catalyst</span></div>
-</div>
-</div>
-</div>
-
-<!-- PRIORITY -->
-<div id="tab-priority" class="panel">
-<div class="two-col">
-<div>
-  <div class="sh">Priority action index &mdash; June 4, 2026</div>
-  <div class="tbl-wrap" style="padding:.45rem .9rem">
-    <div class="pr-row"><div class="pn" style="color:var(--red)">P1</div><div class="pb2"><div class="pt">Launch "Fear &amp; Greed = 11" SIP campaign in the next 4 hours</div><div class="pd">F&amp;G at 11 is a once-or-twice-a-year event. No competitor is running a "fear = SIP opportunity" campaign right now. Run across Reels, Twitter, paid ads. CTA: "Start BTC SIP from Rs.100." Source: news.bitcoin.com</div></div><span class="pill pill-red" style="flex-shrink:0;align-self:flex-start">URGENT NOW</span></div>
-    <div class="pr-row"><div class="pn" style="color:var(--red)">P2</div><div class="pb2"><div class="pt">Pre-schedule June 6 Jobs Report content &mdash; both scenarios</div><div class="pd">Write "Soft jobs = BTC recovery" and "Strong jobs = watch $65K support" posts now. Schedule both for June 6 AM. Win the narrative race before competitors. Source: coindcx.com/blog</div></div><span class="pill pill-red" style="flex-shrink:0;align-self:flex-start">URGENT TODAY</span></div>
-    <div class="pr-row"><div class="pn" style="color:var(--amber)">P3</div><div class="pb2"><div class="pt">Publish "ZebPay was in Parliament" authority content</div><div class="pd">Leadership piece: "We were at Parliament. Here's India's crypto future." LinkedIn + Reel. Free authority and trust. No other exchange has published this angle. Source: bitrss.com</div></div><span class="pill pill-amber" style="flex-shrink:0;align-self:flex-start">HIGH</span></div>
-    <div class="pr-row"><div class="pn" style="color:var(--amber)">P4</div><div class="pb2"><div class="pt">XRP CME Futures content + feature XRP INR pair on app</div><div class="pd">Publish explainer reel + thread. Feature XRP on app homepage. CME 24/7 launch is institutional validation. Timeline: 24 hours. Source: coinmarketcap.com</div></div><span class="pill pill-amber" style="flex-shrink:0;align-self:flex-start">HIGH</span></div>
-    <div class="pr-row"><div class="pn" style="color:var(--blue)">P5</div><div class="pb2"><div class="pt">Contrarian liquidation explainer &mdash; SIP vs leverage</div><div class="pd">"92% of today's selling was forced liquidations." Data-driven thread. Positions ZebPay as the calm, intelligent voice in a chaotic market. Source: bitrue.com/blog</div></div><span class="pill pill-blue" style="flex-shrink:0;align-self:flex-start">MEDIUM</span></div>
-    <div class="pr-row"><div class="pn" style="color:var(--blue)">P6</div><div class="pb2"><div class="pt">Coinbase + Binance counter-strategy &mdash; accelerate habit locking</div><div class="pd">Coinbase got CFTC perp futures approval. Binance launched $5 equity service. Deepen ZebPay user habits (SIP streaks, earn programs) before Coinbase activates INR pairs. Timeline: 30 days. Source: investingnews.com</div></div><span class="pill pill-blue" style="flex-shrink:0;align-self:flex-start">MEDIUM</span></div>
-    <div class="pr-row"><div class="pn" style="color:var(--green)">P7</div><div class="pb2"><div class="pt">WazirX trust gap campaign &mdash; "12 years, zero breaches"</div><div class="pd">WazirX still rebuilding. ZebPay's security record is unmatched in India. Run "India's safest crypto exchange" targeting former WazirX users. Ongoing. Source: cryptonews.com, koinly.io</div></div><span class="pill pill-green" style="flex-shrink:0;align-self:flex-start">ONGOING</span></div>
-    <div class="pr-row"><div class="pn" style="color:var(--teal)">P8</div><div class="pb2"><div class="pt">India COINS Act thought leadership series (30-day)</div><div class="pd">3-part series: What COINS Act means &rarr; ZebPay's compliance position &rarr; What Indian investors need to know. LinkedIn + YouTube. Positions ZebPay as the regulatory authority voice. Source: bitrss.com</div></div><span class="pill pill-teal" style="flex-shrink:0;align-self:flex-start">LONG TERM</span></div>
-  </div>
-</div>
-<div class="src-col">
-  <div class="src-col-title">&#128240; Sources for each priority</div>
-  <div class="src-item"><div class="src-domain">news.bitcoin.com</div><div class="src-desc">F&amp;G 11 &mdash; drives P1 urgency and timing</div><span class="pill pill-red">P1</span></div>
-  <div class="src-item"><div class="src-domain">coindcx.com/blog</div><div class="src-desc">June 6 NFP catalyst analysis &mdash; drives P2 scheduling</div><span class="pill pill-red">P2</span></div>
-  <div class="src-item"><div class="src-domain">bitrss.com</div><div class="src-desc">India Parliamentary meeting, ZebPay in room &mdash; drives P3 and P8</div><span class="pill pill-amber">P3 &amp; P8</span></div>
-  <div class="src-item"><div class="src-domain">coinmarketcap.com</div><div class="src-desc">CME XRP 24/7 futures launch &mdash; drives P4</div><span class="pill pill-amber">P4</span></div>
-  <div class="src-item"><div class="src-domain">bitrue.com/blog</div><div class="src-desc">92% liquidation data &mdash; drives P5 contrarian content</div><span class="pill pill-blue">P5</span></div>
-  <div class="src-item"><div class="src-domain">investingnews.com</div><div class="src-desc">Coinbase CFTC approval, Binance equity &mdash; drives P6 counter-strategy</div><span class="pill pill-blue">P6</span></div>
-  <div class="src-item"><div class="src-domain">cryptonews.com</div><div class="src-desc">WazirX hack fallout still active &mdash; drives P7 trust campaign</div><span class="pill pill-green">P7</span></div>
-</div>
-</div>
-</div>
-
-</div>
+</main>
 
 <script>
-function showTab(id, btn) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tb').forEach(b => b.classList.remove('active'));
-  document.getElementById('tab-' + id).classList.add('active');
-  btn.classList.add('active');
+// ═══════════════════════════════════════════════════════
+// REPORT DATABASE — Add new dates here
+// ═══════════════════════════════════════════════════════
+const REPORTS = {
+  "2026-06-03": {
+    meta: {
+      btcPrice: "BTC $69,800",
+      sentiment: "Extreme Fear · 23",
+      sentimentClass: "fear",
+      headline: "BTC down 14% in 30 days. Extreme Fear = SIP window. CLARITY Act incoming. Fee war intensifying.",
+    },
+    metrics: [
+      { label: "BTC Price", value: "$69.8K", sub: "−14% (30d)", subClass: "down" },
+      { label: "Fear & Greed", value: "23", sub: "Extreme Fear", subClass: "down" },
+      { label: "ETH Price", value: "$2,006", sub: "Holding $2K", subClass: "" },
+      { label: "Market Phase", value: "Correction", sub: "SIP season ↑", subClass: "up" },
+    ],
+    opportunities: [
+      { num: "01", title: "Extreme Fear = SIP Push Moment", desc: '"Market down 14% — the best time to start your Bitcoin SIP." Campaign window is NOW.', feature: "Bitcoin SIP", priority: "URGENT", priorityClass: "badge-red" },
+      { num: "02", title: "CLARITY Act Expected by July", desc: "Position ZebPay as the most compliant, trusted Indian exchange before the regulatory wave hits.", feature: "Trust / Compliance", priority: "HIGH", priorityClass: "badge-amber" },
+      { num: "03", title: "India Fee War Counter-Narrative", desc: 'WazirX → CoinDCX → CoinSwitch all racing to zero fees. ZebPay counters with VALUE: "Not just cheap. Smart."', feature: "CryptoPacks + SIP", priority: "HIGH", priorityClass: "badge-amber" },
+      { num: "04", title: "NEAR Protocol AI-DeFi Narrative", desc: "NEAR hit 5M daily transactions. AI+crypto is 2026's defining narrative. Ride it with educational content + NEAR CryptoPack.", feature: "CryptoPacks AI Pack", priority: "MEDIUM", priorityClass: "badge-blue" },
+      { num: "05", title: "XRP Momentum Surge", desc: "Ripple OCC charter + $22M ETF inflows. Create XRP deep-dive content and promote XRP SIP/trading pair.", feature: "XRP Trading + SIP", priority: "MEDIUM", priorityClass: "badge-blue" },
+    ],
+    threats: [
+      { title: "Prolonged BTC Correction", desc: "Reduces new user installs and trading volume. Mitigation: SIP positioning + 'buy the dip' educational content." },
+      { title: "Coinbase India Re-Entry with INR Fiat", desc: "Biggest long-term threat. Planning INR fiat deposits 2026. Lock in users now via SIP habit loops." },
+      { title: "CoinSwitch Zero-Fee Entry", desc: "Price-sensitive user churn risk. Mitigation: Promote feature depth > price." },
+      { title: "Indian Stablecoin Regulatory Uncertainty", desc: "RBI pushing CBDC vs private stablecoins. Publish clear educational content to build trust." },
+      { title: "Global Macro Headwinds", desc: "Geopolitical volatility suppressing risk appetite. Lean into DCA/SIP as hedge against timing risk." },
+    ],
+    trends: [
+      {
+        name: "Extreme Fear Correction", badge: "🔴 BTC Down 14%", badgeClass: "badge-red",
+        scores: [{ label: "Momentum", pct: 80, cls: "fill-red" }, { label: "Opportunity", pct: 90, cls: "fill-green" }],
+        desc: "BTC fell 14% in 30 days, F&G at 23. Demand contracting ~232K BTC/month. Short-term weakness, institutional ETF inflows intact.",
+        angle: "Extreme Fear = extreme SIP opportunity. Run 'Ab India Karega Bitcoin SIP' aggressively now."
+      },
+      {
+        name: "CLARITY Act — July", badge: "📋 Regulatory Catalyst", badgeClass: "badge-blue",
+        scores: [{ label: "Growth Potential", pct: 90, cls: "fill-blue" }, { label: "Risk", pct: 30, cls: "fill-amber" }],
+        desc: "CLARITY Act grants CFTC jurisdiction, enables new ETFs, unlocks institutional capital. Expected signed by July 2026.",
+        angle: '"Why regulatory clarity is bullish for you" content series. Position ZebPay as regulatory-ready.'
+      },
+      {
+        name: "India Exchange Fee War", badge: "⚠️ Competitive Risk", badgeClass: "badge-amber",
+        scores: [{ label: "Competitive Risk", pct: 80, cls: "fill-red" }],
+        desc: "WazirX → CoinDCX → CoinSwitch in zero-fee race. Race to the bottom ongoing. ZebPay should NOT join.",
+        angle: '"Zero fees, zero features. Or ZebPay." — Promote SIP automation + CryptoPacks Rebalancing + 50x Futures.'
+      },
+      {
+        name: "AI + DeFi Convergence", badge: "🤖 NEAR/TAO Trending", badgeClass: "badge-teal",
+        scores: [{ label: "Momentum", pct: 70, cls: "fill-teal" }, { label: "30d Growth", pct: 85, cls: "fill-green" }],
+        desc: "NEAR at 5M daily txns. TAO rallied on Covenant-72B AI model. PORTAL AI toolkit drove 136% weekly gains.",
+        angle: "AI CryptoPack, TAO/NEAR educational content. 'The AI revolution has a crypto layer.'"
+      },
+      {
+        name: "RWA Tokenization", badge: "🌐 Institutional Driven", badgeClass: "badge-purple",
+        scores: [{ label: "Institutional", pct: 90, cls: "fill-blue" }, { label: "Retail", pct: 50, cls: "fill-amber" }],
+        desc: "CLARITY Act covers RWA regulation. Mudrex CEO and analysts cite RWA as India's top adoption driver.",
+        angle: '"What is RWA?" explainer series + LinkedIn thought leadership positioning.'
+      },
+      {
+        name: "Stablecoin Infrastructure", badge: "🔄 GENIUS Act Passed", badgeClass: "badge-green",
+        scores: [{ label: "90d Potential", pct: 90, cls: "fill-green" }],
+        desc: "GENIUS Stablecoin Act passed. India exploring stablecoin framework. Cross-margin with stablecoins as collateral emerging.",
+        angle: "Stablecoin education + 'earn on USDT' campaign. India stablecoin framework explainer series."
+      },
+    ],
+    competitors: [
+      { name: "CoinDCX", tags: [{ label: "Fee War Leader", cls: "badge-red" }, { label: "Coinbase Backed", cls: "badge-blue" }], desc: "Backed by Coinbase investment. Strong price prediction content dominating SEO. Zero-fee positioning. Expert Trades for guided trading. Weakness: content feels institutional, not personal.", opp: "Beat them on emotional connection — SIP stories, real user journeys, relatable Hindi/English content." },
+      { name: "CoinSwitch", tags: [{ label: "Entering Zero-Fee", cls: "badge-amber" }, { label: "₹600Cr Recovery", cls: "badge-blue" }], desc: "Pro platform with TradingView, INR futures, zero-fee API trading. Strong with algo/advanced traders. Weakness: beginners find it complex.", opp: "Own the 'simplest crypto app' position. CryptoPacks vs their complexity. Beginners trust ZebPay more." },
+      { name: "WazirX", tags: [{ label: "Trust Damaged", cls: "badge-red" }, { label: "Relaunched Oct 2025", cls: "badge-amber" }], desc: "Relaunched after $230M hack. Zero-fee survival strategy. Trust severely damaged but brand recognition intact.", opp: '"India\'s oldest, never hacked" trust campaign. ZebPay is the safe alternative for WazirX refugees.' },
+      { name: "Coinbase", tags: [{ label: "Re-entering India", cls: "badge-red" }, { label: "INR Fiat 2026", cls: "badge-blue" }], desc: "Re-entered India. Planning INR fiat deposits in 2026. Backed CoinDCX. CLARITY Act lobbying. Biggest long-term threat.", opp: '"Indian-built, locally trusted since 2014." Heritage narrative. Lock in users before Coinbase completes INR integration.' },
+      { name: "Mudrex", tags: [{ label: "RWA Focus", cls: "badge-teal" }, { label: "CEO Thought Leader", cls: "badge-blue" }], desc: "Strong CEO voice on stablecoins + RWA. Baskets/automated strategies product. Smaller user base, less brand awareness.", opp: "CryptoPacks Rebalancing is better than Mudrex baskets for retail — promote directly. Match their RWA thought leadership." },
+      { name: "Binance / Bybit / Bitget", tags: [{ label: "Global Platforms", cls: "badge-amber" }, { label: "TDS Risk", cls: "badge-red" }], desc: "Not FIU-registered / inconsistent TDS compliance in India. Attract power users with leverage and altcoin depth.", opp: '"Trade on ZebPay — we handle your TDS so you don\'t have to." Compliance as competitive advantage.' },
+    ],
+    narratives: [
+      { name: "Bitcoin / Digital Gold", score: "9/10", scoreCls: "badge-blue", bars: [{ lbl: "Overall Score", pct: 90, cls: "fill-blue" }, { lbl: "Retail", pct: 85, cls: "fill-teal" }, { lbl: "Institutional", pct: 90, cls: "fill-green" }] },
+      { name: "Stablecoins / Payments", score: "8.5/10", scoreCls: "badge-green", bars: [{ lbl: "Overall Score", pct: 85, cls: "fill-green" }, { lbl: "Retail", pct: 65, cls: "fill-teal" }, { lbl: "Institutional", pct: 95, cls: "fill-green" }] },
+      { name: "AI Agents / AI-Crypto", score: "8/10", scoreCls: "badge-teal", bars: [{ lbl: "Overall Score", pct: 80, cls: "fill-teal" }, { lbl: "Retail", pct: 75, cls: "fill-teal" }, { lbl: "Institutional", pct: 80, cls: "fill-blue" }] },
+      { name: "ETF Flows / Institutional", score: "8/10", scoreCls: "badge-blue", bars: [{ lbl: "Overall Score", pct: 80, cls: "fill-blue" }, { lbl: "Retail", pct: 60, cls: "fill-amber" }, { lbl: "Institutional", pct: 92, cls: "fill-green" }] },
+      { name: "RWA Tokenization", score: "7.5/10", scoreCls: "badge-purple", bars: [{ lbl: "Overall Score", pct: 75, cls: "fill-purple" }, { lbl: "Retail", pct: 50, cls: "fill-amber" }, { lbl: "Institutional", pct: 90, cls: "fill-green" }] },
+      { name: "XRP / Payments Rail", score: "7.5/10", scoreCls: "badge-teal", bars: [{ lbl: "Overall Score", pct: 75, cls: "fill-teal" }, { lbl: "Retail", pct: 80, cls: "fill-teal" }, { lbl: "Institutional", pct: 75, cls: "fill-blue" }] },
+      { name: "DeFi / Perp DEXs", score: "7/10", scoreCls: "badge-blue", bars: [{ lbl: "Overall Score", pct: 70, cls: "fill-blue" }, { lbl: "Retail", pct: 65, cls: "fill-teal" }, { lbl: "Institutional", pct: 70, cls: "fill-green" }] },
+      { name: "Memecoins", score: "5.5/10", scoreCls: "badge-amber", bars: [{ lbl: "Overall Score", pct: 55, cls: "fill-amber" }, { lbl: "Retail", pct: 80, cls: "fill-amber" }, { lbl: "Institutional", pct: 20, cls: "fill-red" }] },
+      { name: "Privacy / ZK Proofs", score: "6/10 ↑", scoreCls: "badge-purple", bars: [{ lbl: "Overall Score", pct: 60, cls: "fill-purple" }, { lbl: "30d Growth", pct: 75, cls: "fill-green" }] },
+    ],
+    prices: [
+      {
+        coin: "Bitcoin (BTC)", current: "~$69,800", momentum: "badge-amber",
+        note: "RSI ~34 (oversold). Support $68.3K. Resistance $73.8K–74K. 28 bearish vs 5 bullish technicals. ETF inflows still intact long-term. F&G 23.",
+        scenarios: [
+          { label: "7 Day", bull: "$76.5K–78K", base: "$69K–72K", bear: "$62K–65K" },
+          { label: "30 Day", bull: "$82K–84K", base: "$73K–76K", bear: "$60K–65K" },
+          { label: "90 Day", bull: "$100K–120K", base: "$80K–90K", bear: "$55K–65K" },
+        ]
+      },
+      {
+        coin: "Ethereum (ETH)", current: "~$2,006", momentum: "badge-blue",
+        note: "Holding $2K psychological level. RWA tokenization + CLARITY Act boost ETH as institutional asset. AI infrastructure narrative supportive.",
+        scenarios: [
+          { label: "30 Day", bull: "$2,400–2,600", base: "$1,900–2,200", bear: "$1,600–1,800" },
+          { label: "90 Day", bull: "$3,000–3,500", base: "$2,200–2,600", bear: "$1,400–1,800" },
+        ]
+      },
+      {
+        coin: "XRP", current: "~$1.22", momentum: "badge-green",
+        note: "Ripple OCC charter + $22M ETF inflows this week. XRP ETFs gained $118M while BTC/ETH saw outflows. Middle East payment infra. Strong retail + institutional alignment.",
+        scenarios: [
+          { label: "30 Day", bull: "$1.60–2.00", base: "$1.10–1.40", bear: "$0.90–1.10" },
+          { label: "90 Day", bull: "$2.50–3.50", base: "$1.40–1.80", bear: "$0.80–1.00" },
+        ]
+      },
+      {
+        coin: "Solana (SOL)", current: "~$74.84", momentum: "badge-amber",
+        note: "Weak short-term (-7.5%). Strong ecosystem fundamentals. NEAR outperforming as AI L1 competitor. Watch for recovery.",
+        scenarios: [
+          { label: "30 Day", bull: "$90–100", base: "$75–85", bear: "$55–68" },
+          { label: "90 Day", bull: "$120–150", base: "$85–105", bear: "$50–65" },
+        ]
+      },
+      {
+        coin: "DOGE", current: "~$0.093", momentum: "badge-red",
+        note: "Lost top-10 to HYPE token. Under pressure in correction. Memecoin narrative cooling. Opportunistic play in bull scenario only.",
+        scenarios: [
+          { label: "30 Day", bull: "$0.14–0.18", base: "$0.08–0.11", bear: "$0.05–0.08" },
+        ]
+      },
+      {
+        coin: "ADA / MATIC (POL)", current: "ADA ~$0.21", momentum: "badge-red",
+        note: "Both under pressure. MATIC/POL narrative unclear post-rebrand. ADA weak at $0.21. Watch for broader market recovery signal.",
+        scenarios: [
+          { label: "30 Day", bull: "$0.35–0.45 / $0.40–0.55", base: "$0.20–0.28 / $0.28–0.36", bear: "$0.12–0.18 / $0.15–0.22" },
+        ]
+      },
+    ],
+    reels: [
+      { num: "01", topic: "Market down 14%. Your SIP is up.", hook: '"I started a Bitcoin SIP 6 months ago. Here\'s what happened when the market crashed."', why: "Counter-intuitive + timely. SIP-familiar India audience. Extreme emotional hook.", diff: "Easy", diffCls: "badge-green" },
+      { num: "02", topic: "What happens to your money when crypto crashes?", hook: '"Everyone\'s panicking. Here\'s what actually happens to your crypto."', why: "Searches spike during fear. Builds trust as educational authority.", diff: "Easy", diffCls: "badge-green" },
+      { num: "03", topic: "CryptoPacks explained in 60 seconds", hook: '"Like mutual funds, but for crypto. Except smarter."', why: "SIP-familiar Indian audience. Mutual fund analogy makes crypto approachable.", diff: "Easy", diffCls: "badge-green" },
+      { num: "04", topic: "Why XRP is the world's payment rail", hook: '"The one crypto that banks are actually using."', why: "XRP narrative at peak. India + global payments angle. High search intent.", diff: "Medium", diffCls: "badge-amber" },
+      { num: "05", topic: "₹100/week Bitcoin SIP for 6 months — result reveal", hook: '"I invested ₹100 every week in Bitcoin SIP. Here\'s my P&L."', why: "Personal finance relatable. Shareable. Aspirational in SIP-culture India.", diff: "Easy", diffCls: "badge-green" },
+      { num: "06", topic: "CLARITY Act — what it means for Indian investors", hook: '"The US just changed crypto rules. India will feel it."', why: "Educates + positions ZebPay as expert voice on regulation.", diff: "Medium", diffCls: "badge-amber" },
+      { num: "07", topic: "What is TAO? The AI coin that rallied 40%", hook: '"AI + crypto = the 2026 narrative. Here\'s the coin everyone missed."', why: "FOMO + education combo. Trending coin. High share potential.", diff: "Easy", diffCls: "badge-green" },
+      { num: "08", topic: "The real cost of zero-fee exchanges", hook: '"Free doesn\'t mean free. Here\'s what zero-fee exchanges actually charge you."', why: "Competitive counter-narrative. Truth-telling hook. Viral potential.", diff: "Medium", diffCls: "badge-amber" },
+      { num: "09", topic: "Extreme Fear Index at 23 — what happened every time before", hook: '"Last time Fear & Greed hit 23, Bitcoin did THIS 6 months later."', why: "Data-driven. Builds hope in fear. Historical chart walkthrough format.", diff: "Medium", diffCls: "badge-amber" },
+      { num: "10", topic: "How India handles crypto TDS — and who does it for you", hook: '"Your crypto exchange is supposed to file your TDS. Most don\'t."', why: "High compliance pain point. High Google intent. ZebPay advantage.", diff: "Easy", diffCls: "badge-green" },
+      { num: "11", topic: "NEAR Protocol: 5 million transactions a day", hook: '"A blockchain doing more transactions than most countries\' payment systems."', why: "Data hook + AI narrative connection. Trending ecosystem.", diff: "Medium", diffCls: "badge-amber" },
+      { num: "12", topic: "CryptoPacks Rebalancing explained", hook: '"Your portfolio rebalances itself while you sleep. Here\'s how."', why: "New ZebPay feature. High educational value. No competitor is talking about this.", diff: "Easy", diffCls: "badge-green" },
+      { num: "13", topic: "Bitcoin was invented during the 2008 crash", hook: '"Satoshi built Bitcoin during a financial crisis. Sound familiar?"', why: "Storytelling + Bitcoin narrative depth. Highly shareable historical parallel.", diff: "Medium", diffCls: "badge-amber" },
+      { num: "14", topic: "₹100/day Bitcoin SIP since 2020 — calculate reveal", hook: '"If you started a ₹100/day Bitcoin SIP in January 2020..."', why: "Aspirational. Calculator-style reveal. Shareable. SIP culture India.", diff: "Easy", diffCls: "badge-green" },
+      { num: "15", topic: "What is RWA tokenization? (And why your bank is terrified)", hook: '"Banks are quietly buying into this. Here\'s why they\'re scared."', why: "Contrarian hook. Trending institutional topic. Strong share motivation.", diff: "Medium", diffCls: "badge-amber" },
+      { num: "16", topic: "ETH holding $2000 while everything dumps", hook: '"Every coin is bleeding. Except one. Here\'s what ETH is telling us."', why: "Timely market analysis. Strong ETH community engagement.", diff: "Easy", diffCls: "badge-green" },
+      { num: "17", topic: "Crypto vs Mutual Funds SIP — the actual data", hook: '"5 years. ₹5000/month. Crypto SIP vs Nifty 50 SIP. Who won?"', why: "India-specific. High-intent financial comparison. Highly shareable.", diff: "Hard", diffCls: "badge-red" },
+      { num: "18", topic: "ZebPay since 2014 — India's crypto story", hook: '"We were here before most Indians even heard the word Bitcoin."', why: "Trust narrative. Heritage brand film. Oldest exchange = competitive moat.", diff: "Hard", diffCls: "badge-red" },
+      { num: "19", topic: "What happens after every F&G below 25?", hook: '"Every time Fear & Greed dropped this low, here\'s what happened next..."', why: "Hope + data + actionability. Perfect engagement loop for fearful market.", diff: "Medium", diffCls: "badge-amber" },
+      { num: "20", topic: "3 things your crypto exchange should do — but doesn't", hook: '"Most exchanges are missing these 3 things. Does yours have them?"', why: "Product education disguised as advice. ZebPay feature showcase.", diff: "Easy", diffCls: "badge-green" },
+    ],
+    features: [
+      { trend: "BTC Correction (Extreme Fear)", tags: ["Bitcoin SIP", "CryptoPacks"], tagCls: ["badge-blue", "badge-teal"], cta: '"Market down. Your SIP doesn\'t care. Start Bitcoin SIP at ₹100/day."', reel: "Side-by-side: panic seller vs SIP investor over 6 months. Emotional storytelling format." },
+      { trend: "Portfolio Volatility", tags: ["CryptoPacks Rebalancing"], tagCls: ["badge-teal"], cta: '"Set it. Forget it. CryptoPacks auto-rebalances so you don\'t panic."', reel: '"I used to manually sell when BTC pumped. Then I discovered rebalancing." User story format.' },
+      { trend: "AI Crypto Narrative", tags: ["AI CryptoPack", "NEAR/TAO Trading"], tagCls: ["badge-purple", "badge-teal"], cta: '"AI + crypto is the 2026 narrative. Invest in the AI CryptoPack on ZebPay."', reel: '"The AI revolution has a crypto layer. Here\'s how to invest in it smartly."' },
+      { trend: "Regulatory Clarity", tags: ["Trust Campaign", "ZebPay × KoinX"], tagCls: ["badge-blue", "badge-green"], cta: '"Trade with confidence. ZebPay is FIU-registered, TDS-compliant, and India-first."', reel: '"Is your exchange handling your crypto taxes? Here\'s what ZebPay does automatically."' },
+      { trend: "New Investor Wave", tags: ["CryptoPacks", "Bitcoin SIP", "Quick Trade"], tagCls: ["badge-teal", "badge-blue", "badge-green"], cta: '"New to crypto? Start with ₹100. No jargon. No stress. Just ZebPay."', reel: "Beginner onboarding series — 5-part reel journey from zero to first investment." },
+      { trend: "XRP Momentum", tags: ["XRP Trading", "XRP SIP"], tagCls: ["badge-amber", "badge-blue"], cta: '"XRP is making moves. Trade it on ZebPay with INR pairs."', reel: '"Why XRP is India\'s most discussed coin this week — and what to do about it."' },
+    ],
+    priorities: [
+      { num: "P1", numColor: "#ff4d6d", title: 'Launch "Extreme Fear = SIP Opportunity" campaign immediately', desc: "Timely hook, competitive void, maps to Bitcoin SIP product. Run across Reels + Twitter + paid. CTA: 'Start BTC SIP at ₹100/day.' Timeline: 48 hours.", tag: "URGENT", tagCls: "badge-red" },
+      { num: "P2", numColor: "#ff4d6d", title: "Security + Trust counter-campaign vs WazirX", desc: '"India\'s oldest exchange, never hacked." LinkedIn + Twitter. Directly captures WazirX refugee users. Timeline: this week.', tag: "URGENT", tagCls: "badge-red" },
+      { num: "P3", numColor: "#f5a623", title: "XRP deep-dive content + promote XRP trading/SIP", desc: "XRP is the week's strongest altcoin narrative. 2 reels + 1 thread + promote XRP INR pair on app banner. Timeline: 3 days.", tag: "HIGH", tagCls: "badge-amber" },
+      { num: "P4", numColor: "#f5a623", title: "CLARITY Act educational content series (30-day)", desc: "3-part series: What is CLARITY Act → Why it's bullish → What ZebPay is doing. LinkedIn + YouTube. Timeline: this month.", tag: "MEDIUM", tagCls: "badge-blue" },
+      { num: "P5", numColor: "#4a9eff", title: "AI CryptoPack launch or feature promotion", desc: "NEAR + TAO + AI infrastructure coins trending. If CryptoPack includes them, promote. If not, consider adding. Timeline: 2 weeks.", tag: "MEDIUM", tagCls: "badge-blue" },
+      { num: "P6", numColor: "#4a9eff", title: "CryptoPacks Rebalancing feature content", desc: "No competitor is talking about automated rebalancing. ZebPay owns this. 1 dedicated reel + landing page SEO. Timeline: this week.", tag: "MEDIUM", tagCls: "badge-blue" },
+      { num: "P7", numColor: "#36d67c", title: "ZebPay × KoinX tax compliance evergreen content", desc: '"Does your exchange handle your TDS?" — Google intent high year-round. Build SEO content + 2 reels. Timeline: 2 weeks.', tag: "ONGOING", tagCls: "badge-green" },
+      { num: "P8", numColor: "#36d67c", title: "Coinbase India entry counter-strategy (60–90 day prep)", desc: "Deepen feature moat + user loyalty habits (SIP streaks, earn programs) before Coinbase fully launches INR fiat. Timeline: Q3 2026.", tag: "LONG TERM", tagCls: "badge-teal" },
+    ],
+  }
+  // ADD MORE DATES HERE in the same format:
+  // "2026-06-04": { ... }
+};
+
+// ═══════════════════════════════════════════════════════
+// CALENDAR STATE
+// ═══════════════════════════════════════════════════════
+let calDate = new Date(2026, 5, 1); // June 2026
+let selectedDate = "2026-06-03";
+let activeTab = "exec";
+
+function pad(n) { return String(n).padStart(2, '0'); }
+function dateKey(y, m, d) { return `${y}-${pad(m+1)}-${pad(d)}`; }
+
+function renderCalendar() {
+  const y = calDate.getFullYear();
+  const m = calDate.getMonth();
+  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  document.getElementById("calMonthYear").textContent = `${months[m]} ${y}`;
+
+  const grid = document.getElementById("calGrid");
+  grid.innerHTML = "";
+
+  const days = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+  days.forEach(d => {
+    const el = document.createElement("div");
+    el.className = "cal-day-name";
+    el.textContent = d;
+    grid.appendChild(el);
+  });
+
+  const first = new Date(y, m, 1).getDay();
+  const total = new Date(y, m+1, 0).getDate();
+  const prevTotal = new Date(y, m, 0).getDate();
+  const today = new Date();
+  const todayKey = dateKey(today.getFullYear(), today.getMonth(), today.getDate());
+
+  for (let i = 0; i < first; i++) {
+    const el = document.createElement("div");
+    el.className = "cal-day other-month";
+    el.textContent = prevTotal - first + 1 + i;
+    grid.appendChild(el);
+  }
+
+  for (let d = 1; d <= total; d++) {
+    const el = document.createElement("div");
+    const key = dateKey(y, m, d);
+    let cls = "cal-day";
+    if (REPORTS[key]) cls += " has-data";
+    if (key === selectedDate) cls += " selected";
+    if (key === todayKey) cls += " today";
+    el.className = cls;
+    el.textContent = d;
+    el.onclick = () => selectDate(key);
+    grid.appendChild(el);
+  }
+
+  const remaining = 42 - first - total;
+  for (let d = 1; d <= remaining; d++) {
+    const el = document.createElement("div");
+    el.className = "cal-day other-month";
+    el.textContent = d;
+    grid.appendChild(el);
+  }
 }
+
+function changeMonth(dir) {
+  calDate.setMonth(calDate.getMonth() + dir);
+  renderCalendar();
+}
+
+function selectDate(key) {
+  selectedDate = key;
+  renderCalendar();
+  renderReport(key);
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER REPORT
+// ═══════════════════════════════════════════════════════
+function renderReport(key) {
+  const data = REPORTS[key];
+  const [y, m, d] = key.split("-");
+  const dateObj = new Date(parseInt(y), parseInt(m)-1, parseInt(d));
+  const dateStr = dateObj.toLocaleDateString("en-IN", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+  document.getElementById("reportTitle").textContent = "Daily Intelligence Report";
+  document.getElementById("reportDateDisplay").textContent = dateStr;
+
+  if (!data) {
+    document.getElementById("btcPrice").textContent = "BTC —";
+    document.getElementById("marketSentiment").textContent = "No data";
+    document.getElementById("marketSentiment").className = "status-pill neutral";
+    document.getElementById("contentArea").innerHTML = `
+      <div class="no-data">
+        <div class="icon">📭</div>
+        <h3>No report for ${dateStr}</h3>
+        <p>There's no intelligence report for this date yet. Reports are added daily. Check back soon or select June 3, 2026 to see the sample report.</p>
+        <button class="add-report-btn" onclick="selectDate('2026-06-03')">View June 3, 2026 Report →</button>
+      </div>`;
+    return;
+  }
+
+  document.getElementById("btcPrice").textContent = data.meta.btcPrice;
+  document.getElementById("marketSentiment").textContent = data.meta.sentiment;
+  document.getElementById("marketSentiment").className = `status-pill ${data.meta.sentimentClass}`;
+
+  renderContent(data);
+}
+
+function switchTab(tab, el) {
+  activeTab = tab;
+  document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+  if (el) el.classList.add("active");
+
+  const data = REPORTS[selectedDate];
+  if (data) renderContent(data);
+}
+
+function renderContent(data) {
+  const area = document.getElementById("contentArea");
+
+  let html = `<div class="tab-nav">`;
+  const tabs = [
+    { id: "exec", label: "Executive" }, { id: "market", label: "Market Trends" },
+    { id: "competitor", label: "Competitors" }, { id: "narratives", label: "Narratives" },
+    { id: "price", label: "Price Intel" }, { id: "content", label: "Content Ideas" },
+    { id: "features", label: "ZebPay Features" }, { id: "priority", label: "Priority Index" }
+  ];
+  tabs.forEach(t => {
+    html += `<button class="tab-btn${activeTab === t.id ? " active" : ""}" onclick="activeTab='${t.id}';renderContent(REPORTS['${selectedDate}']);updateNavActive('${t.id}')">${t.label}</button>`;
+  });
+  html += `</div>`;
+
+  // Alert banner
+  html += `<div class="alert-box" style="margin-bottom:1.25rem"><p>⚡ ${data.meta.headline}</p></div>`;
+
+  if (activeTab === "exec") html += renderExec(data);
+  else if (activeTab === "market") html += renderMarket(data);
+  else if (activeTab === "competitor") html += renderCompetitor(data);
+  else if (activeTab === "narratives") html += renderNarratives(data);
+  else if (activeTab === "price") html += renderPrice(data);
+  else if (activeTab === "content") html += renderContent2(data);
+  else if (activeTab === "features") html += renderFeatures(data);
+  else if (activeTab === "priority") html += renderPriority(data);
+
+  area.innerHTML = html;
+}
+
+function updateNavActive(tab) {
+  document.querySelectorAll(".nav-item").forEach((n, i) => {
+    const tabIds = ["exec","market","competitor","narratives","price","content","features","priority"];
+    n.classList.toggle("active", tabIds[i] === tab);
+  });
+}
+
+function renderExec(data) {
+  let html = `<div class="section-heading">Market Snapshot</div>`;
+  html += `<div class="grid-4">`;
+  data.metrics.forEach(m => {
+    html += `<div class="card"><div class="card-title">${m.label}</div><div class="card-value">${m.value}</div><div class="card-sub ${m.subClass}">${m.sub}</div></div>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="section-heading">Top 5 Opportunities This Week</div>`;
+  html += `<div class="action-list">`;
+  data.opportunities.forEach(o => {
+    html += `<div class="action-item">
+      <div class="action-num" style="color:var(--accent)">${o.num}</div>
+      <div class="action-body" style="flex:1">
+        <div class="action-title">${o.title}</div>
+        <div class="action-desc">${o.desc}</div>
+        <div style="margin-top:4px;font-size:11px;color:var(--text3)">Feature: ${o.feature}</div>
+      </div>
+      <div class="action-meta"><span class="badge ${o.priorityClass}">${o.priority}</span></div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="section-heading" style="margin-top:1.5rem">Top 5 Threats</div>`;
+  html += `<div class="action-list">`;
+  data.threats.forEach((t, i) => {
+    html += `<div class="action-item">
+      <div class="action-num" style="color:var(--red)">T${i+1}</div>
+      <div class="action-body">
+        <div class="action-title">${t.title}</div>
+        <div class="action-desc">${t.desc}</div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function renderMarket(data) {
+  let html = `<div class="section-heading">Market Trend Analysis</div>`;
+  data.trends.forEach(t => {
+    html += `<div class="metric-card" style="margin-bottom:.75rem">
+      <h4><span class="badge ${t.badgeClass}">${t.name}</span></h4>`;
+    t.scores.forEach(s => {
+      html += `<div class="score-row">
+        <span class="score-label">${s.label}</span>
+        <div class="score-bg"><div class="score-fill ${s.cls}" style="width:${s.pct}%"></div></div>
+        <span class="score-num">${s.pct/10}/10</span>
+      </div>`;
+    });
+    html += `<p style="margin-top:8px;font-size:12px;color:var(--text2);line-height:1.6">${t.desc}</p>`;
+    html += `<div class="cta-strip"><div class="cta-lbl">ZebPay Marketing Angle</div><p>${t.angle}</p></div>`;
+    html += `</div>`;
+  });
+  return html;
+}
+
+function renderCompetitor(data) {
+  let html = `<div class="section-heading">Competitor Intelligence</div>`;
+  html += `<div class="grid-2">`;
+  data.competitors.forEach(c => {
+    html += `<div class="comp-card">
+      <h4>${c.name}</h4>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:.35rem">`;
+    c.tags.forEach((t, i) => {
+      html += `<span class="badge ${t.cls}">${t.label}</span>`;
+    });
+    html += `</div>
+      <div class="comp-desc">${c.desc}</div>
+      <div class="opp-box"><div class="opp-label">ZebPay Opportunity</div><p>${c.opp}</p></div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  html += `<div class="alert-box" style="margin-top:1rem"><p>🔑 Content gap this week: None of ZebPay's competitors are running an "Extreme Fear = SIP Opportunity" campaign. Own this narrative in the next 48 hours before others pivot to it.</p></div>`;
+
+  html += `<div class="section-heading" style="margin-top:1.5rem">Competitive Content Gap Matrix</div>`;
+  html += `<div class="content-table-wrap"><table class="intel-table"><thead><tr><th>Topic</th><th>Competitor Strength</th><th>Opportunity</th></tr></thead><tbody>`;
+  const gaps = [
+    ["SIP during market correction","Low — none running this","badge-green|10/10 — Own it now"],
+    ["CryptoPacks rebalancing","None (unique feature)","badge-green|10/10 — ZebPay exclusive"],
+    ["Security / trust narrative","WazirX weak, CoinDCX neutral","badge-teal|9/10"],
+    ["TDS / tax compliance","KoinX covers well","badge-blue|8/10 — Partner amplify"],
+    ["CLARITY Act India explainer","Low — Unocoin has one article","badge-blue|8/10"],
+    ["AI crypto narrative (NEAR/TAO)","CoinDCX blog has some","badge-amber|7/10"],
+    ["XRP payment rail India","Moderate — CoinSwitch covers XRP","badge-amber|7/10"],
+    ["BTC price prediction SEO","CoinDCX dominates this","badge-amber|5/10 — Secondary"],
+  ];
+  gaps.forEach(g => {
+    const [cls, val] = g[2].split("|");
+    html += `<tr><td>${g[0]}</td><td style="color:var(--text2)">${g[1]}</td><td><span class="badge ${cls}">${val}</span></td></tr>`;
+  });
+  html += `</tbody></table></div>`;
+  return html;
+}
+
+function renderNarratives(data) {
+  let html = `<div class="section-heading">Narrative Score Dashboard — June 2026</div>`;
+  html += `<div class="content-table-wrap"><div style="padding:.75rem 1rem">`;
+  data.narratives.forEach(n => {
+    html += `<div class="narr-row">
+      <div class="narr-name">${n.name}</div>
+      <div class="narr-bar-group">`;
+    n.bars.forEach(b => {
+      html += `<div class="mini-row"><span class="mini-lbl">${b.lbl}</span><div class="mini-bg"><div class="mini-fill ${b.cls}" style="width:${b.pct}%"></div></div></div>`;
+    });
+    html += `</div>
+      <div style="flex-shrink:0"><span class="badge ${n.scoreCls}">${n.score}</span></div>
+    </div>`;
+  });
+  html += `</div></div>`;
+  html += `<div class="alert-box" style="margin-top:1rem"><p>🔥 Hottest narrative for ZebPay this week: "Buying the dip via SIP" — maps directly to Bitcoin SIP + Extreme Fear moment. Secondary: XRP + AI infrastructure (NEAR/TAO) educational content.</p></div>`;
+  return html;
+}
+
+function renderPrice(data) {
+  let html = `<div class="section-heading">Price Intelligence — Probability Scenarios (Not Financial Advice)</div>`;
+  data.prices.forEach(p => {
+    html += `<div class="metric-card" style="margin-bottom:.75rem">
+      <h4 style="justify-content:space-between">${p.coin} <span class="badge ${p.momentum}">${p.current}</span></h4>
+      <p style="font-size:12px;color:var(--text2);margin:.35rem 0 .5rem;line-height:1.6">${p.note}</p>`;
+    p.scenarios.forEach(s => {
+      html += `<div style="margin-bottom:.5rem"><div style="font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px">${s.label}</div>
+        <div class="price-scenarios" style="grid-template-columns:repeat(3,1fr)">
+          <div class="price-box bull"><div class="case bull">Bull</div><div class="range">${s.bull}</div></div>
+          <div class="price-box base"><div class="case base">Base</div><div class="range">${s.base}</div></div>
+          <div class="price-box bear"><div class="case bear">Bear</div><div class="range">${s.bear}</div></div>
+        </div></div>`;
+    });
+    html += `</div>`;
+  });
+  return html;
+}
+
+function renderContent2(data) {
+  let html = `<div class="section-heading">Viral Reel Ideas — Top 20</div>`;
+  html += `<div class="content-table-wrap"><table class="intel-table">
+    <thead><tr><th>#</th><th>Topic / Hook</th><th>Why It Works</th><th>Difficulty</th></tr></thead><tbody>`;
+  data.reels.forEach(r => {
+    html += `<tr>
+      <td style="font-family:'DM Mono',monospace;color:var(--text3)">${r.num}</td>
+      <td><strong style="color:var(--text);font-weight:500">${r.topic}</strong><br><span style="color:var(--text3);font-size:11px">${r.hook}</span></td>
+      <td>${r.why}</td>
+      <td><span class="badge ${r.diffCls}">${r.diff}</span></td>
+    </tr>`;
+  });
+  html += `</tbody></table></div>`;
+
+  html += `<div class="section-heading" style="margin-top:1.5rem">Top 10 Twitter/X Post Ideas</div>`;
+  const tweets = [
+    { t: "Fear & Greed: 23. Our SIP users: still DCA-ing.", type: "Data", cls: "badge-blue" },
+    { t: "XRP ETFs attracted $118M while BTC/ETH ETFs saw outflows this week.", type: "Analysis", cls: "badge-teal" },
+    { t: "Bitcoin has been called dead 476 times. It currently sits at $69,800.", type: "Contrarian", cls: "badge-amber" },
+    { t: "India is one of the few countries where your exchange handles TDS for you.", type: "Educational", cls: "badge-green" },
+    { t: "CLARITY Act thread: what it means for Indian retail investors 👇", type: "Thread", cls: "badge-blue" },
+    { t: "NEAR: 5M daily transactions. TAO: new AI model. PORTAL: +136% weekly. AI crypto is infrastructure.", type: "Data", cls: "badge-teal" },
+    { t: '"Zero fees sound great until you ask: where does the money come from? 🧵"', type: "Contrarian", cls: "badge-amber" },
+    { t: "ZebPay has been operating since 2014. 12 years, zero security breaches of user funds.", type: "Trust", cls: "badge-red" },
+    { t: "If you started a ₹1000/week Bitcoin SIP in January 2023, here's your P&L today 👇", type: "Aspirational", cls: "badge-green" },
+    { t: "The GENIUS Stablecoin Act passed. India is exploring its own framework. Thread 🧵", type: "Thread", cls: "badge-blue" },
+  ];
+  html += `<div class="content-table-wrap"><table class="intel-table"><thead><tr><th>#</th><th>Tweet Concept</th><th>Type</th></tr></thead><tbody>`;
+  tweets.forEach((tw, i) => {
+    html += `<tr><td style="font-family:'DM Mono',monospace;color:var(--text3)">${String(i+1).padStart(2,'0')}</td><td>${tw.t}</td><td><span class="badge ${tw.cls}">${tw.type}</span></td></tr>`;
+  });
+  html += `</tbody></table></div>`;
+
+  html += `<div class="section-heading" style="margin-top:1.5rem">Top 5 LinkedIn Thought Leadership Posts</div>`;
+  const li = [
+    { title: "India's crypto regulatory moment", desc: "Why the CLARITY Act and India's stablecoin framework exploration could unlock the next wave of institutional capital — 600-word analysis.", aud: "B2B / Institutional" },
+    { title: "RWA tokenization: India's 2028 opportunity", desc: "How India could become a global hub for tokenized real estate and government bonds — forward-looking vision piece.", aud: "Fintech / Investors" },
+    { title: "12 years of operating a crypto exchange in India", desc: "What we've learned about trust, regulation, and retail behavior — ZebPay CEO/leadership voice.", aud: "Industry / Founders" },
+    { title: "The fee war is a race to zero", desc: "Why the exchanges that survive won't be the cheapest ones — strategic op-ed countering the fee war narrative.", aud: "Industry / VCs" },
+    { title: "Crypto SIP adoption in India", desc: "Why systematic investing in digital assets mirrors the success of mutual fund SIPs — data-driven insight.", aud: "BFSI / Retail Finance" },
+  ];
+  html += `<div class="grid-2">`;
+  li.forEach(p => {
+    html += `<div class="metric-card"><h4>${p.title}</h4><p>${p.desc}</p><div style="margin-top:6px"><span class="badge badge-blue" style="font-size:10px">${p.aud}</span></div></div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function renderFeatures(data) {
+  let html = `<div class="section-heading">Trend → ZebPay Feature Mapping</div>`;
+  data.features.forEach(f => {
+    html += `<div class="feature-row">
+      <h4>${f.trend}</h4>
+      <div class="tag-row">`;
+    f.tags.forEach((t, i) => {
+      html += `<span class="badge ${f.tagCls[i]}">${t}</span>`;
+    });
+    html += `</div>
+      <div class="cta-strip"><div class="cta-lbl">Suggested CTA</div><p>${f.cta}</p></div>
+      <div class="reel-tip">💡 Reel concept: ${f.reel}</div>
+    </div>`;
+  });
+  return html;
+}
+
+function renderPriority(data) {
+  let html = `<div class="section-heading">Priority Action Index</div>`;
+  html += `<div class="content-table-wrap" style="padding:.5rem 1rem">`;
+  data.priorities.forEach(p => {
+    html += `<div class="priority-row">
+      <div class="priority-num" style="color:${p.numColor}">${p.num}</div>
+      <div class="priority-body" style="flex:1">
+        <div class="p-title">${p.title}</div>
+        <div class="p-desc">${p.desc}</div>
+      </div>
+      <div class="priority-tag"><span class="badge ${p.tagCls}">${p.tag}</span></div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+renderCalendar();
+renderReport(selectedDate);
 </script>
 </body>
 </html>
